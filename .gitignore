@@ -5,6 +5,8 @@
 /vendor
 /.docker/logs 
 /.docker/volumes
+/.npm
+/.npm-global
 
 .env
 .env.backup
