@@ -1,29 +1,37 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" lg="2" >
-        <v-menu  v-model="menu" :close-on-content-click="false" 
-          transition="scale-transition" offset-y max-width="290px" min-width="290px">
-          <template v-slot:activator="{ on, attrs }" >
-            <v-text-field  v-model="date" label="Choisir une date" v-bind="attrs" v-on="on"> </v-text-field>
+      <v-col>
+        <v-menu
+          v-model="menu"
+          :close-on-content-click="false"
+          transition="scale-transition"
+          offset-y
+          max-width="290px"
+          min-width="290px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="date"
+              label="Choisir une date"
+              v-bind="attrs"
+              v-on="on"
+            >
+            </v-text-field>
           </template>
-          <v-date-picker v-model="date" no-title  @change="init" @input="menu = false"></v-date-picker>
+          <v-date-picker
+            v-model="date"
+            no-title
+            @change="init"
+            @input="menu = false"
+          ></v-date-picker>
         </v-menu>
       </v-col>
-      <ModalAddOrdi @addview="updateViewOrdi" />
+      <br>
+      <v-col>
+        <ModalAddOrdi @addview="updateViewOrdi" />
+      </v-col>
     </v-row>
-
-    <v-row>
-      <v-btn @click="test"></v-btn>
-      <v-pagination v-model="ordinateurs" :length="4">
-
-      </v-pagination>
-    </v-row>
-    
-
-    
-
-
     <v-container>
       <v-row class="my-2">
         <div
@@ -31,7 +39,12 @@
           v-for="(ordinateur, key) in ordinateurs"
           :key="key"
         >
-          <Ordinateurs :ordinateur="ordinateur" :date="date" @delOrdi="delOrdi"/> <!-- :ordinateur->défini le props lors du montage du composent !-->
+          <Ordinateurs
+            :ordinateur="ordinateur"
+            :date="date"
+            @delOrdi="delOrdi"
+          />
+          <!-- :ordinateur->défini le props lors du montage du composent !-->
         </div>
       </v-row>
     </v-container>

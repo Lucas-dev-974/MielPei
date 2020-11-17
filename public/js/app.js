@@ -2113,7 +2113,6 @@ __webpack_require__.r(__webpack_exports__);
     init: function init() {
       var _this = this;
 
-      var nbOrdi = this.ordinateurs.length;
       this.ordinateurs = []; // important pour réactualiser le tableau a chaque changement de date
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/ordinateurs', {
@@ -2141,17 +2140,6 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
       });
-    },
-    test: function test() {
-      var _this3 = this;
-
-      for (i = 0; i < this.ordinateurs.length; i++) {}
-
-      this.ordinateurs.forEach(function (element) {
-        console.log(element);
-        _this3.pagination.page;
-      });
-      console.log(this.ordinateurs);
     }
   }
 });
@@ -2210,11 +2198,11 @@ __webpack_require__.r(__webpack_exports__);
           prenom: element.client.prenom
         };
       });
+      this.horraire = [];
       this.displayHorraire();
     },
     displayHorraire: function displayHorraire() {
       var data = {};
-      this.horraire = [];
 
       for (var i = 8; i < 19; i++) {
         if (this.attributions[i]) {
@@ -2222,20 +2210,18 @@ __webpack_require__.r(__webpack_exports__);
             index: i,
             attribution: this.attributions[i]
           };
-          this.horraire.push(data);
         } else {
           data = {
             index: i,
             attribution: ''
           };
-          this.horraire.push(data);
         }
+
+        this.horraire.push(data);
       }
     },
     deleteAttr: function deleteAttr(horraire) {
-      console.log(this.attributions);
-      console.log(horraire);
-      Object(lodash__WEBPACK_IMPORTED_MODULE_1__["unset"])(this.attributions, horraire);
+      Object(lodash__WEBPACK_IMPORTED_MODULE_1__["unset"])(this.horraire, horraire);
       this.initialize();
     },
     AddAttribution: function AddAttribution(attr) {
@@ -2249,7 +2235,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteOrdi: function deleteOrdi(ordi) {
       this.$emit("delOrdi", ordi);
     },
-    test: function test(horraire) {
+    delAttr: function delAttr(horraire) {
       var _this2 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/attributions/' + this.attributions[horraire].id).then(function (_ref) {
@@ -20087,29 +20073,20 @@ var render = function() {
             var attrs = ref.attrs
             return [
               _c(
-                "v-row",
-                { staticClass: "ma-2 pa-2" },
-                [
-                  _c("h3", [_vm._v("Gestion ordinateur")]),
-                  _vm._v(" "),
-                  _c(
+                "v-btn",
+                _vm._g(
+                  _vm._b(
+                    {
+                      staticClass: "ml-5 mt-5",
+                      attrs: { icon: "", color: "green" }
+                    },
                     "v-btn",
-                    _vm._g(
-                      _vm._b(
-                        {
-                          staticClass: "ml-5",
-                          attrs: { icon: "", color: "green" }
-                        },
-                        "v-btn",
-                        attrs,
-                        false
-                      ),
-                      on
-                    ),
-                    [_c("v-icon", [_vm._v("mdi-card-plus")])],
-                    1
-                  )
-                ],
+                    attrs,
+                    false
+                  ),
+                  on
+                ),
+                [_c("v-icon", [_vm._v("mdi-card-plus")])],
                 1
               )
             ]
@@ -20129,9 +20106,15 @@ var render = function() {
       _c(
         "v-card",
         [
-          _c("v-card-title", [
-            _vm._v("\n            Ajouter un ordinateur\n        ")
-          ]),
+          _c(
+            "v-card-title",
+            [
+              _c("v-row", { attrs: { justify: "center" } }, [
+                _vm._v("Ajouter un ordinateur")
+              ])
+            ],
+            1
+          ),
           _vm._v(" "),
           _c(
             "v-container",
@@ -20156,8 +20139,14 @@ var render = function() {
                       })
                     ],
                     1
-                  ),
-                  _vm._v(" "),
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                [
                   _c(
                     "v-col",
                     { attrs: { cols: "4" } },
@@ -20175,11 +20164,7 @@ var render = function() {
                               )
                             ]
                           )
-                        : _c("v-btn", { attrs: { color: "red", dark: "" } }, [
-                            _vm._v(
-                              "\n                        Ajouter\n                    "
-                            )
-                          ])
+                        : _c("v-btn", { attrs: { disabled: "", dark: "" } })
                     ],
                     1
                   )
@@ -20384,7 +20369,6 @@ var render = function() {
         [
           _c(
             "v-col",
-            { attrs: { cols: "12", lg: "2" } },
             [
               _c(
                 "v-menu",
@@ -20461,26 +20445,13 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("ModalAddOrdi", { on: { addview: _vm.updateViewOrdi } })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-row",
-        [
-          _c("v-btn", { on: { click: _vm.test } }),
+          _c("br"),
           _vm._v(" "),
-          _c("v-pagination", {
-            attrs: { length: 4 },
-            model: {
-              value: _vm.ordinateurs,
-              callback: function($$v) {
-                _vm.ordinateurs = $$v
-              },
-              expression: "ordinateurs"
-            }
-          })
+          _c(
+            "v-col",
+            [_c("ModalAddOrdi", { on: { addview: _vm.updateViewOrdi } })],
+            1
+          )
         ],
         1
       ),
@@ -20555,65 +20526,63 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _vm._l(_vm.horraire, function(data) {
-        return _c(
-          "div",
-          { key: data.id },
-          [
-            _c(
-              "v-card-text",
-              [
-                _c(
-                  "v-row",
-                  [
-                    _c("v-col", { attrs: { cols: "3" } }, [
-                      _vm._v(" " + _vm._s(data.index) + "H")
-                    ]),
-                    _vm._v(" "),
-                    _c("v-col", { attrs: { cols: "5" } }, [
-                      _vm._v(" " + _vm._s(data.attribution.nom))
-                    ]),
-                    _vm._v(" "),
-                    data.attribution
-                      ? _c(
-                          "v-col",
-                          { staticClass: "text-right", attrs: { cols: "4" } },
-                          [
-                            _c(
-                              "v-icon",
-                              {
-                                attrs: { color: "error" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.test(data.index)
-                                  }
+      _c(
+        "v-card-text",
+        _vm._l(_vm.horraire, function(data) {
+          return _c(
+            "div",
+            { key: data.id },
+            [
+              _c(
+                "v-row",
+                [
+                  _c("v-col", { attrs: { cols: "3" } }, [
+                    _vm._v(" " + _vm._s(data.index) + "H")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-col", { attrs: { cols: "5" } }, [
+                    _vm._v(" " + _vm._s(data.attribution.nom))
+                  ]),
+                  _vm._v(" "),
+                  data.attribution
+                    ? _c(
+                        "v-col",
+                        { staticClass: "text-right", attrs: { cols: "4" } },
+                        [
+                          _c(
+                            "v-icon",
+                            {
+                              attrs: { color: "error" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.delAttr(data.index)
                                 }
-                              },
-                              [_vm._v("mdi-minus")]
-                            )
-                          ],
-                          1
-                        )
-                      : _c("addAttribution", {
-                          attrs: {
-                            ordinateur: _vm.ordinateur.id,
-                            horraire: data,
-                            date: _vm.date
-                          },
-                          on: { AddAttribution: _vm.AddAttribution }
-                        })
-                  ],
-                  1
-                )
-              ],
-              1
-            )
-          ],
-          1
-        )
-      })
+                              }
+                            },
+                            [_vm._v("mdi-minus")]
+                          )
+                        ],
+                        1
+                      )
+                    : _c("addAttribution", {
+                        attrs: {
+                          ordinateur: _vm.ordinateur.id,
+                          horraire: data,
+                          date: _vm.date
+                        },
+                        on: { AddAttribution: _vm.AddAttribution }
+                      })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        }),
+        0
+      )
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -80166,8 +80135,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/lucas/Bureau/web-project/laravel/gao2/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/lucas/Bureau/web-project/laravel/gao2/resources/css/app.css */"./resources/css/app.css");
+__webpack_require__(/*! /home/node/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/node/resources/css/app.css */"./resources/css/app.css");
 
 
 /***/ })

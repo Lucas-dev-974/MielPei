@@ -5,7 +5,8 @@ import { reduceRight, unset } from 'lodash';
 
 export default{
     components:{
-        Ordinateurs, ModalAddOrdi
+        Ordinateurs, 
+        ModalAddOrdi
     },
     data() {
         return {
@@ -20,7 +21,6 @@ export default{
 
     methods: {
         init(){
-            let nbOrdi = this.ordinateurs.length
             
             this.ordinateurs = []  // important pour réactualiser le tableau a chaque changement de date
             Axios.get('/api/ordinateurs', { params: {date: this.date}})
@@ -29,9 +29,6 @@ export default{
                     this.ordinateurs.push(element);
                 })
             })
-           
-
-            
         },
 
         updateViewOrdi(nomOrdi){
@@ -46,10 +43,5 @@ export default{
                 console.log(error);
             })
         },
-
-        test(){
-            
-            console.log(this.ordinateurs)
-        }
     }
 }

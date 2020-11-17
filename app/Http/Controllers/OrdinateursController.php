@@ -17,7 +17,7 @@ class OrdinateursController extends Controller
         $date = ordinateurModel::with(['attributions' => function($q) use ($date) {
             $q->where('date', $date['date'])
             ->with(['client']);
-        }])->get();
+        }])->simplePaginate(3);
 
         return Collection_OrdinateurResource::collection($date);
     }
@@ -38,5 +38,9 @@ class OrdinateursController extends Controller
         if(isset($data['id']) && !empty($data['id'])){
             $modelOrdi = ordinateurModel::where('id', $data['id'])->delete();
         }
+    }
+
+    function pagination(Request $req){
+        
     }
 }

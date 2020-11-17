@@ -30,39 +30,35 @@ export default{
         initialize(){
             this.ordinateur.attribution.forEach(element => {
                 this.attributions[element.horraire] ={
-                    id:  element.id,
-                    nom: element.client.nom,
+                    id:     element.id,
+                    nom:    element.client.nom,
                     prenom: element.client.prenom,
                 };
             });
-
+            this.horraire = []
             this.displayHorraire();
         },
 
         displayHorraire(){
-            let data = {}           
-            this.horraire = []
+            let data = {} 
             for(let i = 8; i < 19; i++){
                 if(this.attributions[i]){
                     data = {
                         index:       i,
                         attribution: this.attributions[i]
                     }
-                    this.horraire.push(data);
                 }else{
                     data = {
                         index:  i,
                         attribution: ''
                     }
-                    this.horraire.push(data)
                 }
+                this.horraire.push(data);
             }   
         },
 
         deleteAttr(horraire){
-            console.log(this.attributions)
-            console.log(horraire)
-            unset(this.attributions, horraire)
+            unset(this.horraire, horraire)
             this.initialize()
         },
 
@@ -79,7 +75,7 @@ export default{
             this.$emit("delOrdi", ordi)
         },
 
-        test(horraire){
+        delAttr(horraire){
             Axios.get('/api/attributions/' + this.attributions[horraire].id)
             .then(({data}) => {
                 unset(this.attributions, horraire)

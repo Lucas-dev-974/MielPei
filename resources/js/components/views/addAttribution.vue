@@ -17,7 +17,6 @@
                     <v-btn :disabled="validClient" @click="attribute"  > Attribuer </v-btn>
                     <v-btn  :disabled="!validClient"  @click="AddClient"> Ajouter le client </v-btn>
                 </v-row>
-
             </v-container>
             
         </v-card>
