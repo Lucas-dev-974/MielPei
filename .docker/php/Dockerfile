@@ -27,5 +27,5 @@ RUN mkdir -p /home/$user/.composer && \
 
 # Set working directory
 WORKDIR /var/www
-
+RUN echo 'alias dc="sudo docker-compose"' >> ~/.bashrc
 USER $user
