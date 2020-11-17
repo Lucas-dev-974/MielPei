@@ -16,7 +16,6 @@ class CreateAttribtutionTable extends Migration
         Schema::enableForeignKeyConstraints();
         Schema::create('attributions', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
             $table->string('horraire');
             $table->bigInteger('id_client')->unsigned()->nullable();
             $table->bigInteger('id_ordi')->unsigned()->nullable();

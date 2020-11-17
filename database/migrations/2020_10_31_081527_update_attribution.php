@@ -13,7 +13,7 @@ class UpdateAttribution extends Migration
      */
     public function up()
     {
-        Schema::table('attribution', function (Blueprint $table){
+        Schema::table('attributions', function (Blueprint $table){
             $table->date('date');
         });
     }
@@ -25,7 +25,7 @@ class UpdateAttribution extends Migration
      */
     public function down()
     {
-        Schema::table('attribution', function(Blueprint $table){
+        Schema::table('attributions', function(Blueprint $table){
             $table->dropColumn('date');
         });
     }
