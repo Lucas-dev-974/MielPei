@@ -8,7 +8,7 @@
 
         <v-card>
             <v-card-title>
-                <v-row justify="center">Ajouter un ordinateur</v-row>
+                <v-row class="d-flex justify-content-center">Ajouter un ordinateur</v-row>
             </v-card-title>
 
             <v-container>

@@ -1,39 +1,29 @@
 <template>
   <v-container>
     <v-row>
+      
       <v-col>
-        <v-menu
-          v-model="menu"
-          :close-on-content-click="false"
-          transition="scale-transition"
-          offset-y
-          max-width="290px"
-          min-width="290px"
-        >
+        <v-menu v-model="menu" :close-on-content-click="false" transition="scale-transition" offset-y max-width="290px" min-width="290px">
           <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              v-model="date"
-              label="Choisir une date"
-              v-bind="attrs"
-              v-on="on"
-            >
-            </v-text-field>
+            <v-text-field v-model="date" label="Choisir une date" v-bind="attrs" v-on="on" > </v-text-field>
           </template>
-          <v-date-picker
-            v-model="date"
-            no-title
-            @change="init"
-            @input="menu = false"
-          ></v-date-picker>
+
+          <v-date-picker v-model="date"  no-title @change="init" @input="menu = false"></v-date-picker>
         </v-menu>
       </v-col>
+
       <br>
       <v-col>
         <ModalAddOrdi @addview="updateViewOrdi" />
       </v-col>
     </v-row>
+
+    <v-row>
+      <Pagination :pagination="pagination" :date="date" @newPage="newPage" />
+    </v-row>
+    
     <v-container>
-      <v-row class="my-2">
+      <v-row class="my-2 d-flex justify-content-around">
         <div
           class="mx-5 mb-4"
           v-for="(ordinateur, key) in ordinateurs"

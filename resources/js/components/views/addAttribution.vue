@@ -2,7 +2,7 @@
     <v-dialog v-model="modal" width="500">
         <template v-slot:activator="{on, attrs}">
             <v-btn icon color="green" v-bind="attrs" v-on="on" class="ml-5">
-                <v-icon>mdi-card-plus</v-icon>
+                <v-icon>mdi-plus</v-icon>
             </v-btn>
         </template>
 
@@ -13,7 +13,7 @@
                     <v-autocomplete v-model="model" :items="clients" return-object  :search-input.sync="input" item-text="all_name">
                     </v-autocomplete>
                 </v-card-text>
-                <v-row justify="space-around" class="mt-5">
+                <v-row class="d-flex justify-space-around mt-5">
                     <v-btn :disabled="validClient" @click="attribute"  > Attribuer </v-btn>
                     <v-btn  :disabled="!validClient"  @click="AddClient"> Ajouter le client </v-btn>
                 </v-row>

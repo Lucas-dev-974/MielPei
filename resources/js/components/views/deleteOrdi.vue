@@ -2,7 +2,7 @@
   <div class="text-center">
     <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn icon color="red lighten-2" dark v-bind="attrs" v-on="on">
+        <v-btn icon color="red lighten-" class="mt-4" dark v-bind="attrs" v-on="on">
            <v-icon color="error" >mdi-minus</v-icon>
         </v-btn>
       </template>
@@ -14,14 +14,14 @@
 
         <v-card-text>
             <v-container>
-                <v-row justify="center">
+                <v-row class="d-flex justify-content-center">
                     <v-col cols="6">
-                        <v-row justify="center">
+                        <v-row class="d-flex justify-content-center">
                             <v-btn color="error" @click="dialog = false">Non</v-btn>
                         </v-row>
                     </v-col>
                     <v-col cols="6">
-                        <v-row justify="center">
+                        <v-row class="d-flex justify-content-center">
                             <v-btn color="success" @click="deleteOrdinateur">Oui</v-btn>
                         </v-row>
                     </v-col>
