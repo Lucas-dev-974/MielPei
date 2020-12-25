@@ -17,7 +17,7 @@ class OrdinateursController extends Controller
         $date = ordinateurModel::with(['attributions' => function($q) use ($date) {
             $q->where('date', $date['date'])
             ->with(['client']);
-        }])->simplePaginate(3);
+        }])->paginate(3);
 
         return Collection_OrdinateurResource::collection($date);
     }

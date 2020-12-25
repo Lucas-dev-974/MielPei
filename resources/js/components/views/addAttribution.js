@@ -47,7 +47,6 @@ export default{
         attribute() {
             Axios.post('/api/attributions?date=' + this.date + "&heure=" + this.horraire.index + "&id_ordi=" + this.ordinateur + "&id_client=" + this.model.id)
             .then(response => {
-                console.log(response.data)
                 this.$emit('AddAttribution', this.AttrClient(response.data.id))
                 this.modal = false
             }).catch(error => {

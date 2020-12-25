@@ -64,7 +64,7 @@ export default{
 
         AddAttribution(attr){
             this.attributions[attr.horraire] = {
-                id:  attr.id_client,
+                id:  attr.id,
                 nom: attr.client_name,
                 prenom: attr.client_lst_name,
             }
