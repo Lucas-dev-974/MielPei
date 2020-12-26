@@ -23,7 +23,9 @@ export default{
     mounted() { this.init(); },
 
     methods: {
+        
         init(){
+            console.log('--init--');
             this.ordinateurs = []  // important pour réactualiser le tableau a chaque changement de date
             Axios.get('/api/ordinateurs', { params: {date: this.date}})
             .then(({data}) => {

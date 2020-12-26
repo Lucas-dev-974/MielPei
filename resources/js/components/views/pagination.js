@@ -27,11 +27,12 @@ export default{
         },
 
         nextPage(){
-            console.log(this.pagination.next);
+            console.log('-----');
             Axios.get(this.pagination.next, {
                 params: {date: this.date},
             })
             .then(({data}) => { 
+                console.log(data);
                 this.$emit('newPage', data)            
             })
         }
