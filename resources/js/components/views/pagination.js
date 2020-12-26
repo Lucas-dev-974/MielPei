@@ -27,7 +27,6 @@ export default{
         },
 
         nextPage(){
-            console.log('-----');
             Axios.get(this.pagination.next, {
                 params: {date: this.date},
             })

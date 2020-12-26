@@ -50,10 +50,9 @@ export default{
         },
 
         newPage(page){
-            console.log(  page.links  );
             this.ordinateurs = []
             page.data.forEach(element => {
-                this.ordinateurs.push(element.data)
+                this.ordinateurs.push(element)
             });
             this.pagination = page.links
         }
