@@ -25,8 +25,11 @@ export default{
     methods: {
         init(){
             this.ordinateurs = []  // important pour réactualiser le tableau a chaque changement de date
-            Axios.get('/api/ordinateurs', { params: {date: this.date}})
+            Axios.get('/api/ordinateurs',  { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }, params: {date: this.date}})
             .then(({data}) => {
+                if(data.error){
+                    location.href = '/login'
+                }
                 data.data.forEach(element => {
                     this.ordinateurs.push(element);
                 })

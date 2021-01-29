@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Resources\attributionsResource;
 use App\Models\attributionsModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AttributionController extends Controller
 {
-
     function addAttr(Request $req){
+        if($this->isConnected() === false){
+            return response()->json([
+                'error' => 'veuillez vous connecter'
+            ]) ;
+        }
         $data = Validator::make($req->query(), [
             'heure'     => 'required',
             'id_ordi'   => 'required',
@@ -30,6 +35,11 @@ class AttributionController extends Controller
     }
 
     function deleteAttribution(Request $req, $id){
+        if($this->isConnected() === false){
+            return response()->json([
+                'error' => 'veuillez vous connecter'
+            ]) ;
+        }
         if(isset($id) && !empty($id)){
             $attrMb = attributionsModel::where('id', $id);
             $attrMb->delete();
