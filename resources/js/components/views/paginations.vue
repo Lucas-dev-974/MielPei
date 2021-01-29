@@ -1,5 +1,4 @@
 <template>
-    
     <div class="d-flex justify-content-start">
         <v-btn icon color="dark" @click="previousPage" class="ml-5">
             <v-icon>mdi-arrow-left-bold-circle-outline</v-icon>

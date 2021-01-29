@@ -27,11 +27,12 @@ Route::prefix('ordinateurs')->group(function(){
     Route::get('/', 'OrdinateursController@get');
     Route::post('/', 'OrdinateursController@add');
     Route::post('/delOrdi', 'OrdinateursController@del');
+    Route::post('/update', 'OrdinateursController@update');
 
 });
 
 Route::prefix('clients')->group(function(){
     Route::get('/search', 'ClientsController@search');
-    Route::post('/', 'ClientsController@add');
+    Route::post('/add', 'ClientsController@add');
     
 });

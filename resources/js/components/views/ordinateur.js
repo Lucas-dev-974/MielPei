@@ -2,11 +2,13 @@ import Axios from "axios"
 import { unset } from "lodash";
 import addAttribution from "./addAttribution.vue"
 import deleteOrdinateur from "./deleteOrdi.vue"
+import ComputerUpdate from './ComputerUpdate.vue'
 
 export default{
     components: {
-         addAttribution, deleteOrdinateur
+         addAttribution, deleteOrdinateur, ComputerUpdate
     },
+
     props: {
         ordinateur: {
             required: true
@@ -35,11 +37,11 @@ export default{
                     prenom: element.client.prenom,
                 };
             });
-            this.horraire = []
             this.displayHorraire();
         },
 
         displayHorraire(){
+            this.horraire = []
             let data = {} 
             for(let i = 8; i < 19; i++){
                 if(this.attributions[i]){
@@ -55,11 +57,6 @@ export default{
                 }
                 this.horraire.push(data);
             }   
-        },
-
-        deleteAttr(horraire){
-            unset(this.horraire, horraire)
-            this.initialize()
         },
 
         AddAttribution(attr){
@@ -79,11 +76,15 @@ export default{
             Axios.get('/api/attributions/' + this.attributions[horraire].id)
             .then(({data}) => {
                 unset(this.attributions, horraire)
-                this.initialize()
+                this.displayHorraire()
             })
             .catch(error => {
                 console.log(error)
             })
+        },
+
+        updateList: function(){
+            this.$emit('init')
         }
     }
 }

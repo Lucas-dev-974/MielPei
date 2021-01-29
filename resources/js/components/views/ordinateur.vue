@@ -1,9 +1,11 @@
 <template>
     <v-card width="150" max-width="300" min-width="250" >
-        
         <v-row class="d-flex justify-content-around">
             <v-card-title class=""> {{ ordinateur.nom }} </v-card-title>
-            <deleteOrdinateur @deleteOrdi="deleteOrdi" :ordi="this.ordinateur" />
+            <div class="d-flex">
+                 <deleteOrdinateur @deleteOrdi="deleteOrdi" :ordi="this.ordinateur" />
+                  <ComputerUpdate :computer='ordinateur' @updateList='updateList' />
+            </div>
         </v-row>
         <v-card-text>
             <div v-for="data in horraire" :key="data.id">

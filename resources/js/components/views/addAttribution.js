@@ -1,7 +1,12 @@
 import Axios from 'axios'
 import { isArray, isEmpty } from 'lodash'
+import AddClient from './ClientAdd.vue'
 
 export default{
+    components: {
+        AddClient
+    },  
+
     props: {
         ordinateur: {
            required: true
@@ -75,11 +80,8 @@ export default{
             }
         },
 
-        AddClient(){
-            console.log(this.input)
-            let name = this.input
-            name = name.split(' ')
-            console.log(name)
+        deleteClientModel(){
+            this.model = {}
         }
     }
 }

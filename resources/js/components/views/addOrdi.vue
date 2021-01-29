@@ -13,13 +13,10 @@
 
             <v-container>
                 <v-row class="pa-2">
-                    <v-col cols="8">
+                    <v-col >
                         <v-text-field v-model="ordiNameInput" label="Entrer le nom de l'ordinateur "></v-text-field>
                     </v-col>
-                </v-row>
-
-                <v-row>
-                    <v-col cols="4">
+                    <v-col cols="4" class="mt-4">
                         <v-btn color='green' dark v-if="ordiNameInput.length > 1" @click="addOrdi">
                             Ajouter
                         </v-btn>

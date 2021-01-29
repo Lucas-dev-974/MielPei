@@ -8,13 +8,13 @@
       </template>
 
       <v-card>
-        <v-card-title class="headline grey lighten-2">
-          Supprimer {{ this.ordi.name }}
+        <v-card-title class="headline grey lighten-2 d-flex justify-content-center">
+          Supprimer {{ this.ordi.nom }}
         </v-card-title>
 
         <v-card-text>
             <v-container>
-                <v-row class="d-flex justify-content-center">
+                <v-row class="d-flex justify-content-center my-4">
                     <v-col cols="6">
                         <v-row class="d-flex justify-content-center">
                             <v-btn color="error" @click="dialog = false">Non</v-btn>

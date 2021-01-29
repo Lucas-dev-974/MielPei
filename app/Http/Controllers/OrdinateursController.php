@@ -40,6 +40,29 @@ class OrdinateursController extends Controller
         }
     }
 
+    public function update(Request $request){
+        $validator = Validator::make($request->all(), [
+            'computerID' => 'required|integer',
+            'computerName' => 'required|string'
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'success' => false,
+                'error'   => $validator->errors()
+            ]);
+        }
+
+        $computer = ordinateurModel::find($request->computerID);
+        $computer->nom = $request->computerName;
+        $computer->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => "L'oridnateur à été modifier avec succées !"
+        ]);
+    }
+
     function pagination(Request $req){
         
     }
