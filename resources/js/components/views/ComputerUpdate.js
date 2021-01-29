@@ -17,7 +17,7 @@ export default{
     methods: {
         Update: function(){
             if(this.computerName.length > 3){
-                Axios.post('/api/ordinateurs/update', {computerID: this.computer.id, computerName: this.computerName})
+                Axios.post('/api/ordinateurs/update?computerID=' + this.computer.id + "&computerName=" +this.computerName)
                 .then(({data}) => {
                     if(data.success == true){
                         this.modal = false

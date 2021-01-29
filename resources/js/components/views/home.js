@@ -4,6 +4,7 @@ import ModalAddOrdi from './addOrdi.vue';
 import Pagination   from './paginations.vue';
 
 import { reduceRight, unset } from 'lodash';
+Axios.defaults.headers.common = {'Authorization': `bearer ${localStorage.getItem('token')}`}
 
 export default{
     components:{
@@ -25,7 +26,7 @@ export default{
     methods: {
         init(){
             this.ordinateurs = []  // important pour réactualiser le tableau a chaque changement de date
-            Axios.get('/api/ordinateurs',  { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }, params: {date: this.date}})
+            Axios.get('/api/ordinateurs', { params: {date: this.date}})
             .then(({data}) => {
                 if(data.error){
                     location.href = '/login'
@@ -42,7 +43,10 @@ export default{
         },
 
         delOrdi(id_ordi){
+           
+
             Axios.post('/api/ordinateurs/delOrdi?id=' + id_ordi).then(({data}) => {
+                console.log(data );
                 unset(this.ordinateurs, id_ordi)
                 this.init()
             }).catch(error => {

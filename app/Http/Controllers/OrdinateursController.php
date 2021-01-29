@@ -65,6 +65,7 @@ class OrdinateursController extends Controller
                 'error' => 'veuillez vous connecter'
             ]) ;
         }
+
         $validator = Validator::make($request->all(), [
             'computerID' => 'required|integer',
             'computerName' => 'required|string'
