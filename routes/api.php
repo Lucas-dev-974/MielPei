@@ -27,25 +27,3 @@ Route::group([
     Route::post('register', [AuthController::class, 'register']);
 });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::prefix('attributions')->group(function () {
-    Route::post('/', 'AttributionController@addAttr');
-    Route::get('/{id}', 'AttributionController@deleteAttribution');
-});
-
-Route::prefix('ordinateurs')->group(function(){
-    Route::get('/', 'OrdinateursController@get');
-    Route::post('/', 'OrdinateursController@add');
-    Route::post('/delOrdi', 'OrdinateursController@del');
-    Route::post('/update', 'OrdinateursController@update');
-
-});
-
-Route::prefix('clients')->group(function(){
-    Route::get('/search', 'ClientsController@search');
-    Route::post('/add', 'ClientsController@add');
-    
-});
