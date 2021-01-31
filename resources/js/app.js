@@ -1,4 +1,5 @@
 require('./bootstrap');
+
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import Router from './router.js';
