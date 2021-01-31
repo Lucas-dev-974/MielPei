@@ -1,7 +1,8 @@
 <template>
       <v-container class="">
          <v-row>
-           <v-col>fdf</v-col>
+             <v-text-field :rules="rules"></v-text-field>
+  
          </v-row>
        </v-container>
 </template>
