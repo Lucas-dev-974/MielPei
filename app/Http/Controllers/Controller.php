@@ -15,6 +15,7 @@ class Controller extends BaseController
     public function isConnected(){
         try{ // Vérifie si il y a un token pour autoriser l'accées aux données
             $user = Auth::userOrFail();
+            return $user;
         }catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e){
             return false;
         }
