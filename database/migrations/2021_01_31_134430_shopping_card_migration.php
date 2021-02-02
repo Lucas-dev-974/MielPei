@@ -20,6 +20,7 @@ class ShoppingCardMigration extends Migration
             $table->integer('quantity');
             $table->boolean('isBuyed');
             $table->decimal('final_price');
+            $table->timestamps();
         });
     }
 

@@ -18,6 +18,7 @@ class VendorsMigration extends Migration
             $table->integer('client_id')->unsigned();
             $table->json('cultur_coordinate');
             $table->string('shop_name');
+            $table->timestamps();
         });
     }
 

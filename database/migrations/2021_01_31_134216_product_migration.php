@@ -20,6 +20,7 @@ class ProductMigration extends Migration
             $table->string('details');
             $table->integer('quantity');
             $table->string('name');
+            $table->timestamps();
         });
     }
 

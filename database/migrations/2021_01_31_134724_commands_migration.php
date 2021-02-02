@@ -18,6 +18,7 @@ class CommandsMigration extends Migration
             $table->integer('shopping_card_id')->unsigned();
             $table->date('commanded_date');
             $table->decimal('totalPrice');
+            $table->timestamps();
         });
     }
 
