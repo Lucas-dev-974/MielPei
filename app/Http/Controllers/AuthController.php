@@ -53,9 +53,11 @@ class AuthController extends Controller
 
     public function register(Request $request){
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'name'  => 'required|string',
-            'password' => 'required|min:6',
+            'email'     => 'required|email',
+            'name'      => 'required|string',
+            'last_name' => 'required|string',
+            'name'      => 'required|string',
+            'password'  => 'required|min:6',
         ]);
 
         if($validator->fails()){
@@ -77,7 +79,8 @@ class AuthController extends Controller
         $user = User::create(array_merge(
             $validator->validated(),
             ['password' => bcrypt($request->password),
-            'tentative' => 0
+            'is_vendor' => false,
+            'phone'     => null
             ]
         ));
 
