@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\User;
+use App\Models\Vendors;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,4 +24,29 @@ class Controller extends BaseController
             return false;
         }
     }
+
+    public function vendorExist($client_id){
+        $vendor = Vendors::where('client_id', $client_id)->first();
+        if(!$vendor){
+            return false;
+        }
+        return true;
+    }
+
+    public function clientExist($client_id){
+        $client = User::where('id', $client_id)->first();
+        if(!$client){
+            return false;
+        }
+        return true;
+    }
+    
+    public function productExist($product_id){
+        $client = Product::where('id', $product_id)->first();
+        if(!$client){
+            return false;
+        }
+        return true;
+    }
+    
 }

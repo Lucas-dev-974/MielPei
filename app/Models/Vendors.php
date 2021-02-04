@@ -10,7 +10,9 @@ class Vendors extends Model
     use HasFactory;
 
     protected $fillable = [
-        'location',
+        'cultur_coordinate',
         'shop_name',
+        'client_id',
+        'id'
     ];
 }

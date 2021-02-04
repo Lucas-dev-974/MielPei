@@ -5,7 +5,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use app\Http\Controllers\ordinateursController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\ShoppingCardController;
 use App\Http\Controllers\VendorsController;
+use App\Models\ShoppingCard;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +44,19 @@ Route::group([
     'middleware' => 'api',
     'prefix'     => 'products'
 ], function ($router) {
+    Route::get('get/{id}', [ProductsController::class, 'getProducts']);
     Route::post('add', [ProductsController::class, 'add']);
+    Route::post('update', [ProductsController::class, 'update']);
+    Route::post('delete', [ProductsController::class, 'delete']);
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix'     => 'shopping-card'
+], function ($router) {
+    Route::post('add', [ShoppingCardController::class, 'add']);
+    Route::get('get-buyed-products', [ShoppingCardController::class, 'getBuyedCard']);
+    Route::get('get-non-buyed-products', [ShoppingCardController::class, 'getNonBuyedCard']);
+    Route::post('remove-to-card', [ShoppingCardController::class, 'removeToCard']);
 });
 

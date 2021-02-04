@@ -17,6 +17,7 @@ class ShoppingCardMigration extends Migration
             $table->id();
             $table->integer('clients_id')->unsigned();
             $table->integer('vendor_id')->unsigned();
+            $table->integer('product_id')->unsigned();
             $table->integer('quantity');
             $table->boolean('isBuyed');
             $table->decimal('final_price');

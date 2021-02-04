@@ -9,9 +9,9 @@ class ShoppingCard extends Model
 {
     use HasFactory;
 
-    private $fillable = [
+    protected $fillable = [
         'quantity',
         'is_buyed',
-        'total_price'
+        'final_price',
     ];
 }
