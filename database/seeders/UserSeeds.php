@@ -22,7 +22,7 @@ class UserSeeds extends Seeder
                 'email'     => 'jason.h@gmail.com',
                 'password'  => Hash::make('jason.H@'),
                 'phone'     => '06125496',
-                'is_vendor' => false,
+                'role' => 'user',
             ]
         ];
 

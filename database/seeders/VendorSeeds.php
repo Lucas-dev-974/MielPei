@@ -21,7 +21,9 @@ class VendorSeeds extends Seeder
                 'shop_name'     => 'Zot miel',
             ]
         ];
+        // foreach(array(1,2,3,4) as $id){
 
+        // }
         DB::table('vendors')->insert($data);
     }
 }

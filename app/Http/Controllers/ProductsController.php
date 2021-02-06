@@ -185,7 +185,7 @@ class ProductsController extends Controller
         ]); 
     }
 
-    public function getProducts(Request $request, $id){
+    public function getProducts(Request $request){
         $validator = Validator::make($request->all(), [
             'products_limit_per_page' => 'required|integer'
         ]);

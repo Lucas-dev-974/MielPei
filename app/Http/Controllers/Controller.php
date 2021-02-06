@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ShoppingCard;
 use App\Models\User;
 use App\Models\Vendors;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -30,7 +31,7 @@ class Controller extends BaseController
         if(!$vendor){
             return false;
         }
-        return true;
+        return $vendor;
     }
 
     public function clientExist($client_id){
@@ -47,6 +48,14 @@ class Controller extends BaseController
             return false;
         }
         return true;
+    }
+
+    public function IsUserShoppingCard($shopping_card_id, $user_id){
+        $card = ShoppingCard::where('id', $shopping_card_id)->get();
+        if($card->clients_id !== $user_id){
+            return false;
+        }
+        return $card;
     }
     
 }

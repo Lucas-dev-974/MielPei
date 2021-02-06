@@ -16,7 +16,7 @@ class VendorsMigration extends Migration
         Schema::create('vendors', function (Blueprint $table) {
             $table->id();
             $table->integer('client_id')->unsigned();
-            $table->json('cultur_coordinate');
+            $table->json('cultur_coordinate')->nullable();
             $table->string('shop_name');
             $table->timestamps();
         });

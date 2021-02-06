@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->string('last_name');
             $table->string('phone')->nullable();
-            $table->boolean('is_vendor');
+            $table->string('role'); 
             
         });
     }

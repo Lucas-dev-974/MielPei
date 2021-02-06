@@ -36,15 +36,16 @@ Route::group([
     'prefix'     => 'vendors'
 ], function ($router) {
     Route::post('add', [VendorsController::class, 'add_vendor']);
-    Route::post('update', [VendorsController::class, 'updateShopName']);
+    Route::post('update', [VendorsController::class, 'update']);
     Route::post('delete', [VendorsController::class, 'delete']);
+    Route::get('get',   [VendorsController::class, 'get']);
 });
 
 Route::group([
     'middleware' => 'api',
     'prefix'     => 'products'
 ], function ($router) {
-    Route::get('get/{id}', [ProductsController::class, 'getProducts']);
+    Route::post('get', [ProductsController::class, 'getProducts']);
     Route::post('add', [ProductsController::class, 'add']);
     Route::post('update', [ProductsController::class, 'update']);
     Route::post('delete', [ProductsController::class, 'delete']);
