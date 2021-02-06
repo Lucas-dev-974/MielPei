@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class VendorCard extends Migration
+class VendorCardMigration extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class VendorCard extends Migration
      */
     public function up()
     {
-        Schema::create('vendor_card', function (Blueprint $table) {
+        Schema::create('vendor_cards', function (Blueprint $table) {
             $table->id();
             $table->integer('vendor_id')->unsigned();
             $table->string('details');
@@ -28,6 +28,6 @@ class VendorCard extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vendor_card');
+        Schema::dropIfExists('vendors_card');
     }
 }
