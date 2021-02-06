@@ -43,8 +43,8 @@ class Controller extends BaseController
     }
     
     public function productExist($product_id){
-        $client = Product::where('id', $product_id)->first();
-        if(!$client){
+        $product = Product::where('id', $product_id)->first();
+        if(!$product){
             return false;
         }
         return true;
@@ -56,6 +56,18 @@ class Controller extends BaseController
             return false;
         }
         return $card;
+    }
+
+    public function IsAdmin($user_id){
+        $user = User::where('id', $user_id)->get();
+        if(!$user){
+            return false;
+        }
+        if($user->role !== 'admin'){
+            return false;
+        }
+
+        return true;
     }
     
 }
