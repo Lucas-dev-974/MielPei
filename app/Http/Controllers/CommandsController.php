@@ -40,6 +40,7 @@ class CommandsController extends Controller
 
         DB::table('commands')->insert([
             'shopping_card_id' => $request->shopping_card_id,
+            'client_id'        => $userConnected->id,
             'total_price'      => $request->total_price,
             'commanded_date'   => new DateTime(),
         ]);
@@ -50,8 +51,16 @@ class CommandsController extends Controller
 
     }
 
-    public function getCommand(){
+    public function get(){
+        $userConnected = $this->isConnected();
+        if($userConnected === false){
+            return response()->json([
+                'error' => 'veuillez vous connecter'
+            ]) ;
+        }
 
+        $commands = DB::table('commands')->where('client_id', $userConnected->id)->get();
+        return $commands;
     }
 
     public function getAllCommand(){

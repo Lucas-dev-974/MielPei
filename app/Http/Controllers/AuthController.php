@@ -16,7 +16,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'validToken']]);
     }
 
     /**
@@ -44,7 +44,10 @@ class AuthController extends Controller
         }
         
         $user = User::where('email', $request->email)->first();
-        
+        $vendor = $this->vendorExist($user->id);
+        if($vendor){
+            $user->vendor =  $vendor;
+        }
         return response()->json([
             'user' => $user,
             'token' => $this->respondWithToken($token)
@@ -104,9 +107,19 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function validToken()
     {
-        return response()->json(Auth::user());
+        $userConnected = $this->isConnected();
+        if(!$userConnected){
+            return response()->json([
+                'success' => false,
+                'error'   => 'votre token est invalide, veuillez vous connecté'
+            ]);
+        }
+        return response()->json([
+            'success' => true,
+            'user'    => $userConnected
+        ]);
     }
 
     /**
