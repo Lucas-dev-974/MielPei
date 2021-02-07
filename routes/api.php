@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommandsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use app\Http\Controllers\ordinateursController;
@@ -27,7 +28,7 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::post('me', [AuthController::class, 'me']);
+    Route::get('validToken', [AuthController::class, 'validToken']);
     Route::post('register', [AuthController::class, 'register']);
 });
 
@@ -62,3 +63,12 @@ Route::group([
 });
 
 
+
+Route::group([
+    'middleware' => 'api',
+    'prefix'     => 'commands'
+], function ($router) {
+    Route::post('make-command', [CommandsController::class, 'makeCommand']);
+    Route::get('get', [CommandsController::class, 'get']);
+   
+});
