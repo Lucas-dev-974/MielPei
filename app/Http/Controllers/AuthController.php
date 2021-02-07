@@ -75,7 +75,7 @@ class AuthController extends Controller
         if($user){
             return response()->json([
                 'status' => false,
-                'error' => 'Email déjà enregistrer'
+                'error' => ['email' => 'Email déjà enregistrer']
             ]);
         }
         
@@ -83,7 +83,7 @@ class AuthController extends Controller
             $validator->validated(),
             ['password' => bcrypt($request->password),
             'role' => 'user',
-            'phone'     => null
+            'phone'     => $request->phone ? $request->phone : null
             ]
         ));
 
@@ -96,6 +96,7 @@ class AuthController extends Controller
         }
 
         return response()->json([
+            'success'  => true,
             'message' => 'Account created', 
             'user' => $user,
             'token' => $token
@@ -116,7 +117,7 @@ class AuthController extends Controller
                 'error'   => 'votre token est invalide, veuillez vous connecté'
             ]);
         }
-        return response()->json([
+        return  response()->json([
             'success' => true,
             'user'    => $userConnected
         ]);
