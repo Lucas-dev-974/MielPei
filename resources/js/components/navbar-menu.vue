@@ -7,19 +7,25 @@
       <v-spacer></v-spacer>
 
       <div v-if='!isConnect'>
-        <a href="" class="fs-6 text-decoration-none mt-1">Se connecter</a> 
+        <a href="/login" class="fs-6 text-decoration-none mt-1">Se connecter</a> 
     </div>
       <v-menu offset-y v-else>
         <template v-slot:activator="{ on, attrs }">
-            <a color="white" style="border-bottom: 1px solid red" v-bind="attrs" v-on="on">
-             Mon compte
-            </a>
+            <v-btn  icon v-bind="attrs" v-on="on">
+                <v-icon dark icon>mdi-account-settings</v-icon>
+            </v-btn>    
         </template>
-        <v-list >
+        <v-list width="150px" >
             <v-list-item-content>
-                <v-list-item-title class="text-center" v-if="user_role === 'vendor'"> <a href="#" class=" text-decoration-none mt-1">Ma boutique</a> </v-list-item-title>
-                <v-list-item-title class="text-center my-2" >                         <a href="#" class=" text-decoration-none mt-1">Mes commandes</a> </v-list-item-title>
-                <v-list-item-title class="text-center">                               <a href="#" class="text-danger text-decoration-none mt-1">Déconnexion</a> </v-list-item-title>
+                <v-list-item-title class="text-center " >                         
+                    <a href="#" class=" text-decoration-none mt-1">Mes commandes</a> 
+                </v-list-item-title>
+                <v-list-item-title class="text-center my-2" v-if="user_role === 'vendor'">
+                    <a href="#" class=" text-decoration-none mt-1">Ma boutique</a> 
+                </v-list-item-title>
+                <v-list-item-title class="text-center">                               
+                    <a href="#" class="text-danger text-decoration-none mt-1" @click="logout">Déconnexion</a> 
+                </v-list-item-title>
             </v-list-item-content>
         </v-list>
     </v-menu>

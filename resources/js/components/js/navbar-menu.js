@@ -1,3 +1,5 @@
+import { unset } from "lodash"
+
 export default{
     props:{
         isConnect: Boolean,
@@ -11,6 +13,8 @@ export default{
     },
 
     methods: {
-        
+        logout: function(){
+            this.$emit('logout')
+        }
     },
 }

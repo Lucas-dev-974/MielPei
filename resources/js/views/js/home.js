@@ -14,7 +14,7 @@ export default{
 
     created() {
        this.isConnected();
-       console.log(this.isConnect);
+       console.log(this.isConnecta);
     },
 
     methods: {
@@ -30,6 +30,14 @@ export default{
                     this.isConnect = true
                     this.user = data.user
                 }
+            })
+        },
+
+        logout: function(){
+            this.isConnect = false
+            localStorage.clear()
+            Axios.post('/api/auth/logout').then(({data}) => {
+                console.log(data);
             })
         }
     },

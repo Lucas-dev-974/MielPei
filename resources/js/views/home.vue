@@ -1,6 +1,6 @@
 <template>
   <div class="">
-  <NavBar :isConnect='isConnect' :user_role='user.role'/>
+  <NavBar :isConnect='isConnect' :user_role='user.role' @logout="logout"/>
     <v-container class="">
       <v-row>
           <v-text-field >  </v-text-field>

@@ -1,0 +1,25 @@
+<template>
+     <v-container class="">
+         <v-row>
+            <v-alert class="col-5 my-5 mx-auto" v-model="alert" close-text="Close Alert" small type="warning" outlined dismissible>
+                {{ alert_msg }}
+            </v-alert>
+         </v-row>
+
+         <v-row>
+            <v-form class="col-5 mx-auto mt-5">
+                <v-text-field v-model="name" label="Nom"> </v-text-field>
+                <v-text-field v-model="last_name" label="Prénom"> </v-text-field>
+                <v-text-field v-model="phone" label="Téléphone"> </v-text-field>
+                <v-text-field v-model="email" label="Email"> </v-text-field>
+                <v-text-field type="password" v-model="password" label="Password"> </v-text-field>
+
+                <v-btn block @click='register'>S'enregistrer</v-btn>
+            </v-form> 
+         </v-row>
+       
+    </v-container>
+
+</template>
+
+<script src='./js/register.js'></script>
