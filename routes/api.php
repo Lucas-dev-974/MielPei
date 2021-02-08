@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Route;
 use app\Http\Controllers\ordinateursController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ShoppingCardController;
+use App\Http\Controllers\VendorsCardController;
 use App\Http\Controllers\VendorsController;
 use App\Models\ShoppingCard;
+use App\Models\Vendors;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +42,10 @@ Route::group([
     Route::post('update', [VendorsController::class, 'update']);
     Route::post('delete', [VendorsController::class, 'delete']);
     Route::get('get',   [VendorsController::class, 'get']);
+
+    Route::get('get-cards', [VendorsCardController::class, 'get_cards']);
+    Route::post('add-cards', [VendorsCardController::class, 'add']);
+    Route::post('update-card', [VendorsCardController::class, 'update']);
 });
 
 Route::group([
