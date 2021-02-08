@@ -1,8 +1,11 @@
-import NavBar from '../../components/navbar-menu.vue'
 import Axios from 'axios'
+import NavBar from '../../components/navbar-menu.vue'
+import VendorsCard from '../../components/vendors_card.vue'
+
 export default{
     components:{
-        NavBar
+        NavBar,
+        VendorsCard
     },
 
     data() {
@@ -22,11 +25,9 @@ export default{
             Axios.get('/api/auth/validToken')
             .then(({data}) => {
                 if(!data.success){
-                    console.log('pas connecté');
                     this.isConnect = false
                 }
                 if(data.success){
-                    console.log('connecté');
                     this.isConnect = true
                     this.user = data.user
                 }
@@ -40,5 +41,7 @@ export default{
                 console.log(data);
             })
         }
+
+        
     },
 }

@@ -6,7 +6,7 @@ import Router from './router.js';
 import Layout from './layout.vue';
 import Axios from 'axios';
 
-axios.defaults.headers.common = {'Authorization': `bearer ${localStorage.getItem('token')}`}
+Axios.defaults.headers.common = {'Authorization': `bearer ${localStorage.getItem('token')}`}
 
 Vue.use(Vuetify)
 const app = new Vue({

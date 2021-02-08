@@ -1,5 +1,4 @@
 import Axios from "axios";
-
 export default{
     data() {
         return {
@@ -11,6 +10,15 @@ export default{
             email: '',
             password: ''
         }
+    },
+
+    mounted() 
+    {
+        Axios.get('/api/auth/validToken').then(({data}) => {
+            if(data.success){
+                location.href = '/'
+            }
+        })
     },
 
     methods: {
@@ -28,8 +36,10 @@ export default{
                         this.alert_msg += data.error.email
                     }
                 }else{
+                    Axios.defaults.headers.common = {'Authorization': `bearer ${data.token}`}        
                     localStorage.setItem('token', data.token)
                     localStorage.setItem('user', data.user)
+
                     location.href = '/'
                 }
             }).catch(error => {
