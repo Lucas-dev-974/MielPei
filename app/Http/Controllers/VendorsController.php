@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Vendors;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 use function PHPUnit\Framework\isEmpty;
@@ -157,4 +158,6 @@ class VendorsController extends Controller
             'vendor'   => $vendor
         ]);
     }
+
+    
 }
