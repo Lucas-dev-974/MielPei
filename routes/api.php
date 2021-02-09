@@ -52,10 +52,13 @@ Route::group([
     'middleware' => 'api',
     'prefix'     => 'products'
 ], function ($router) {
+    Route::get('get-best-products-sold', [ProductsController::class, 'getBestProductsSold']);
     Route::post('get', [ProductsController::class, 'getProducts']);
     Route::post('add', [ProductsController::class, 'add']);
     Route::post('update', [ProductsController::class, 'update']);
     Route::post('delete', [ProductsController::class, 'delete']);
+
+
 });
 
 Route::group([
