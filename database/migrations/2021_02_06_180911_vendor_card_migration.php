@@ -17,6 +17,7 @@ class VendorCardMigration extends Migration
             $table->id();
             $table->integer('vendor_id')->unsigned();
             $table->string('details');
+            $table->string('presentation_img_url');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class VendorCardMigration extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vendors_card');
+        Schema::dropIfExists('vendor_cards');
     }
 }
