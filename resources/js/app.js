@@ -1,4 +1,5 @@
 require('./bootstrap');
+import 'leaflet/dist/leaflet.css';
 
 import Vue from 'vue';
 import Vuetify from 'vuetify';

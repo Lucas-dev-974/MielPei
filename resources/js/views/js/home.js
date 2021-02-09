@@ -1,10 +1,11 @@
 import Axios from 'axios'
 import NavBar from '../../components/navbar-menu.vue'
 import VendorsCard from '../../components/vendors_card.vue'
-
+import Map         from '../../components/map.vue'
 export default{
     components:{
         NavBar,
+        Map,
         VendorsCard
     },
 

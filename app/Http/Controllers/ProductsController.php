@@ -168,11 +168,10 @@ class ProductsController extends Controller
             ]);
         }
 
-        $vendor = Vendors::where(['client_id' => $userConnected->id])->first();
+        $vendor  = Vendors::where(['client_id' => $userConnected->id])->first();
         $product = Product::where(['id' => $request->product_id])->first();
 
         if($product->vendors_id !== $vendor->id){
-            
             return new JsonResponse([
                 'success' => false,
                 'error'   => 'Vous n\'ête pas le vendeur de cet article !'
@@ -198,6 +197,11 @@ class ProductsController extends Controller
         }
 
         $products = DB::table('products')->get();
+        return $products;
+    }
+
+    public function getBestProductsSold(){
+        $products = Product::orderBy('quantity', 'desc')->get();
         return $products;
     }
 }

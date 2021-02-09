@@ -2,8 +2,7 @@
     <v-card color="grey lighten-4" flat height="auto" tile>
     <v-toolbar dense>
       <v-toolbar-title class="mr-4 fs-4">MielPeï</v-toolbar-title>
-      <a href="/" class="fs-6 text-decoration-none mt-1">Acceuil</a>
-
+      <v-btn class="small" v-if="user_roles === 'user'" small elevation="1" color="">Devenir vendeur</v-btn>
       <v-spacer></v-spacer>
 
       <div v-if='!isConnected'>
