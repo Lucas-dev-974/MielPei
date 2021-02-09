@@ -18,6 +18,7 @@ class VendorsMigration extends Migration
             $table->integer('client_id')->unsigned();
             $table->json('cultur_coordinate')->nullable();
             $table->string('shop_name');
+            $table->string('profile_img_url')->nullable();
             $table->timestamps();
         });
     }

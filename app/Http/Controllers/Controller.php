@@ -17,6 +17,10 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    public function __construct()
+    {
+        $this->test = 'test';
+    }
     public function isConnected(){
         try{ // Vérifie si il y a un token pour autoriser l'accées aux données
             $user = Auth::userOrFail();
@@ -39,7 +43,7 @@ class Controller extends BaseController
         if(!$client){
             return false;
         }
-        return true;
+        return $client;
     }
     
     public function productExist($product_id){
@@ -47,7 +51,7 @@ class Controller extends BaseController
         if(!$product){
             return false;
         }
-        return true;
+        return $product;
     }
 
     public function IsUserShoppingCard($shopping_card_id, $user_id){

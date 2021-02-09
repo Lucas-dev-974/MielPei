@@ -17,7 +17,7 @@ class VendorCardMigration extends Migration
             $table->id();
             $table->integer('vendor_id')->unsigned();
             $table->string('details');
-            $table->string('presentation_img_url');
+            $table->string('presentation_img_url')->nullable();
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommandsController;
+use App\Http\Controllers\MediasController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use app\Http\Controllers\ordinateursController;
@@ -46,6 +47,7 @@ Route::group([
     Route::get('get-cards', [VendorsCardController::class, 'get_cards']);
     Route::post('add-cards', [VendorsCardController::class, 'add']);
     Route::post('update-card', [VendorsCardController::class, 'update']);
+    Route::post('add-profile-img', [MediasController::class, 'set_ProfileImageVendors']);
 });
 
 Route::group([
@@ -53,12 +55,12 @@ Route::group([
     'prefix'     => 'products'
 ], function ($router) {
     Route::get('get-best-products-sold', [ProductsController::class, 'getBestProductsSold']);
-    Route::post('get', [ProductsController::class, 'getProducts']);
-    Route::post('add', [ProductsController::class, 'add']);
+    Route::post('get',    [ProductsController::class, 'getProducts']);
+    Route::post('add',    [ProductsController::class, 'add']);
     Route::post('update', [ProductsController::class, 'update']);
     Route::post('delete', [ProductsController::class, 'delete']);
 
-
+    Route::post('add-product-img', [MediasController::class, 'set_ImageProduct']);
 });
 
 Route::group([

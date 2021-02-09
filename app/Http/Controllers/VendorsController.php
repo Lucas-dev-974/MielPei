@@ -70,7 +70,7 @@ class VendorsController extends Controller
             'row_name' => 'string|required',
             'value'    => 'string|required'
         ]);
-
+        
         if($validator->fails()){
             return new JsonResponse([
                 'success' => false,
@@ -78,11 +78,11 @@ class VendorsController extends Controller
             ]);
         }
 
-        $vendor =$this->vendorExist($userConnected->id);
+        $vendor = $this->vendorExist($userConnected->id);
         if(!$vendor){
             return response()->json([
                 "success" => false,
-                "error"   => 'Vous n\'ête pas le vendeur concerné !'
+                "error"   => 'Vous devez être vendeur pour effectué cet action !'
             ]);
         }
 

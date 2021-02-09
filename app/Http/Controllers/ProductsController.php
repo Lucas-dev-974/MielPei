@@ -202,6 +202,12 @@ class ProductsController extends Controller
 
     public function getBestProductsSold(){
         $products = Product::orderBy('quantity', 'desc')->get();
+
+        foreach($products as $product){
+            if($product->url_img === null){
+                $product->url_img = '/images/products/default.jpg';
+            }
+        }
         return $products;
     }
 }

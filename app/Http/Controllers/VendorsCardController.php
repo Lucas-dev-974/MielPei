@@ -58,8 +58,9 @@ class VendorsCardController extends Controller
     }
 
     public function update(Request $request){
+        $userConnected = $this->isConnected();  
         $validator = Validator::make($request->all(), [
-            'details' => 'required|string'
+            'details' => 'required|string',
         ]);
 
         if($validator->fails()){
@@ -67,14 +68,13 @@ class VendorsCardController extends Controller
                 'success' => false,
                 'error'   => $validator->errors()
             ]);
-        }
-        $userConnected = $this->isConnected();
-        if($userConnected === false){
+        }if(!$userConnected){
             return response()->json([
                 'success' => false,
                 'error' => 'veuillez vous connecter'
-            ]) ;
+            ]);
         }
+
         $vendor = $this->vendorExist($userConnected->id);
         if(!$vendor){
             return response()->json([
@@ -82,13 +82,9 @@ class VendorsCardController extends Controller
                 'error'   => 'vous devez être vendeur pour effectuer une modification sur une fiche descriptive'
             ]);
         }
-
-        $card = VendorsCardModel::where('vendor_id', $vendor->id)->get();
-        $card->details = $request->details;
-        $card->save();
+        $card = VendorsCardModel::where('vendor_id', $userConnected->vendor->id)->update(['detail' => $request->details]);
         return response()->json([
             'success' => true,
-
         ]);
 
     }
