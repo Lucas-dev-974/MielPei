@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommandsController;
 use App\Http\Controllers\MediasController;
@@ -83,3 +84,22 @@ Route::group([
     Route::get('get', [CommandsController::class, 'get']);
    
 });
+
+
+Route::group([
+    'middleware' => 'api',
+    'prefix'     => 'admin'
+], function ($router) {
+    
+   
+});
+
+Route::middleware('auth')->prefix('admin')->group(function(){
+    Route::get('get-users', [UsersController::class, 'get_AllUsers']);
+    Route::post('get-users-by-role', [UsersController::class, 'get_UserByRole']);
+    Route::post('update-users-email', [UsersController::class, 'update_UserMail']);
+    Route::post('delete-users-account', [UsersController::class, 'delete_UserAccount']);
+    Route::post('disable-users-account', [UsersController::class, 'disable_UserAccount']); // 2 tranchant, active et désactive un compte user
+    Route::post('update-users-role', [UsersController::class, 'update_UserRole']);
+});
+
