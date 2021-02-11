@@ -45,6 +45,7 @@ export default{
             console.log(this.email);
             Axios.post('/api/admin/update-users-role', {user_id: this.user.id, user_new_role: this.selectRole})
             .then(({data}) => {
+                console.log(data);
                 if(!data.success){  
                     Object.values(data.error).map(error => {
                         console.log(error);
@@ -56,6 +57,8 @@ export default{
                     this.$emit("updateList")
                     this.modal = false
                 }
+            }).catch(error=> {
+                console.log(error);
             })
         }
     },

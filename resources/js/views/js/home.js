@@ -1,16 +1,28 @@
 import Axios from 'axios'
+
+// Pages
+import VendorShop from '../vendor_shop.vue'
+import Account    from '../account.vue'
+
+// Components
 import NavBar from '../../components/navbar-menu.vue'
-import VendorsCard from '../../components/vendors_card.vue'
 import Map         from '../../components/map.vue'
+import ProductView from '../../components/product-view.vue'
+
+ 
 export default{
     components:{
+        VendorShop,
+        Account,
+
         NavBar,
         Map,
-        VendorsCard
+        ProductView,
     },
 
     data() {
         return {
+            pages: 'home',
             user: [],
             isConnect: false
         }

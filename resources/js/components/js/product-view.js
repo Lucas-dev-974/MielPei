@@ -1,7 +1,6 @@
+import Axios from "axios"
+
 export default{
-    props:{
-        products: required
-    },
 
     data() {
         return {
@@ -9,9 +8,14 @@ export default{
         }
     },
 
+    mounted() {
+        this.init_product()
+    },
     methods: {
         init_product(){
-            
+            Axios.get('/api/products/get-best-products-sold').then(({data}) => {
+                console.log(data);
+            })
         }
     },
 }
