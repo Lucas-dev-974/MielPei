@@ -4,6 +4,10 @@ import Home from './views/home.vue';
 import Login from './views/login.vue'
 import Register from './views/register.vue'
 import Boutique from './views/vendor_shop.vue'
+
+import Dashboard from './admin/views/dashboard.vue'
+
+import PageNotFound from './views/404.vue'
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -30,6 +34,14 @@ const router = new VueRouter({
             name: 'ma-boutique',
             component: Boutique,
         },
+
+        {
+            path: '/admin/dashboard',
+            name: 'dashboard',
+            component: Dashboard,
+        },
+
+        { path: "*", component: Home }
     ],
 
 })
