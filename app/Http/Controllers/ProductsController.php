@@ -16,9 +16,11 @@ class ProductsController extends Controller
         $userConnected = $this->isConnected();
         if($userConnected === false){
             return response()->json([
+                'success' => false,
                 'error' => 'veuillez vous connecter'
             ]) ;
         }
+        $userConnected = $this->isConnected();
         $validator = Validator::make($request->all(), [
             'price' => 'required|integer',
             'details' => 'required|string',

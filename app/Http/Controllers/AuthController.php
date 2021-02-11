@@ -44,6 +44,12 @@ class AuthController extends Controller
         }
         
         $user = User::where('email', $request->email)->first();
+        if(!$user->active_account){
+            return response()->json([
+                'success' => false,
+                'error'   => 'votre compte à été bloquer par l\'admin du site'
+            ]);
+        }
         $vendor = $this->vendorExist($user->id);
         if($vendor){
             $user->vendor =  $vendor;
@@ -81,9 +87,11 @@ class AuthController extends Controller
         
         $user = User::create(array_merge(
             $validator->validated(),
-            ['password' => bcrypt($request->password),
+            [
+            'password' => bcrypt($request->password),
             'role' => 'user',
-            'phone'     => $request->phone ? $request->phone : null
+            'active_account' => true,
+            'phone'     => $request->phone ? $request->phone : null,
             ]
         ));
 

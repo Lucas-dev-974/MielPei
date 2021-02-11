@@ -17,10 +17,6 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function __construct()
-    {
-        $this->test = 'test';
-    }
     public function isConnected(){
         try{ // Vérifie si il y a un token pour autoriser l'accées aux données
             $user = Auth::userOrFail();
