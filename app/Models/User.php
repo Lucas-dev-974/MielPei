@@ -65,4 +65,8 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function Vendor(){
+        return $this->hasOne(Vendors::class, 'client_id');
+    }
 }

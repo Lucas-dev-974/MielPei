@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Products extends Model
 {
     use HasFactory;
     
@@ -13,6 +13,12 @@ class Product extends Model
         'price',
         'quantity',
         'details',
+        'vendors_id'
 
     ];
+
+
+    public function vendor(){
+        return $this->belongsTo(Vendors::class);
+    }
 }

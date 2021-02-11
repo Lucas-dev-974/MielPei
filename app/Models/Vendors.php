@@ -15,4 +15,12 @@ class Vendors extends Model
         'client_id',
         'id'
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function products(){
+        return $this->hasMany(Products::class, 'vendors_id');
+    }
 }
