@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Models\Products;
 use App\Models\ShoppingCard;
 use App\Models\User;
 use App\Models\Vendors;
@@ -43,7 +43,7 @@ class Controller extends BaseController
     }
     
     public function productExist($product_id){
-        $product = Product::where('id', $product_id)->first();
+        $product = Products::where('id', $product_id)->first();
         if(!$product){
             return false;
         }

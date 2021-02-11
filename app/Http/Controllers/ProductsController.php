@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Models\Products;
+use App\Models\User;
 use App\Models\Vendors;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,13 +14,12 @@ class ProductsController extends Controller
 {
     
     public function add(Request $request){
-        $userConnected = $this->isConnected();
-        if($userConnected === false){
-            return response()->json([
-                'success' => false,
-                'error' => 'veuillez vous connecter'
-            ]) ;
-        }
+        // if($userConnected === false){
+        //     return response()->json([
+        //         'success' => false,
+        //         'error' => 'veuillez vous connecter'
+        //     ]) ;
+        // }
         $userConnected = $this->isConnected();
         $validator = Validator::make($request->all(), [
             'price' => 'required|integer',
@@ -35,19 +35,15 @@ class ProductsController extends Controller
             ]);
         }
         
-        $vendor = DB::table('vendors')->where('client_id', $userConnected->id)->first();
-        // $vendor = Product::create(array_merge(
-        //     $validator->validated(),
-        //     ['vendors_id' => $vendor->id]
-        // ));
-        if(!$vendor){
+        if($userConnected->role !== 'vendor'){
             return response()->json([
                 'success' => false,
                 'error'   => 'vous devez être vendeur pour ajouter un produit !'
             ]);
         }
+        $vendor = User::find($userConnected->id)->vendor;   
         
-        $product = new Product();
+        $product = new Products();
 
         $product->vendors_id = $vendor->id;
         $product->price = $request->price;
@@ -80,7 +76,7 @@ class ProductsController extends Controller
         }
 
         $vendor = Vendors::where(['client_id' => $userConnected->id])->first();
-        $product = Product::where(['id' => $request->product_id])->first();
+        $product = Products::where(['id' => $request->product_id])->first();
 
         if($product->vendors_id !== $vendor->id){
             return new JsonResponse([
@@ -97,14 +93,14 @@ class ProductsController extends Controller
                         'error'   => 'Seul un nombre est autorisé !'
                     ]);
                 }
-                $product = Product::where(['id' => $request->product_id])->update(['price' => $request->value]);
+                $product = Products::where(['id' => $request->product_id])->update(['price' => $request->value]);
                 return response()->json([
                     'succes' => true
                 ]);
                 break;
 
             case 'quantity':
-                $quantity = Product::where(['id' => $request->product_id])->first()->quantity;
+                $quantity = Products::where(['id' => $request->product_id])->first()->quantity;
                 $option = explode(':', $request->value);
 
                 if(!intval($option[1])){
@@ -130,14 +126,14 @@ class ProductsController extends Controller
                     ]);
                 }
 
-                $product = Product::where(['id' => $request->product_id])->update(['quantity' => $quantity]);
+                $product = Products::where(['id' => $request->product_id])->update(['quantity' => $quantity]);
                 return response()->json([
                     'succes' => true
                 ]);
                 break;
             
             case 'details':
-                $product = Product::where(['id' => $request->product_id])->update(['details' => $request->value]);
+                $product = Products::where(['id' => $request->product_id])->update(['details' => $request->value]);
                 return response()->json([
                     'succes' => true
                 ]);
@@ -171,7 +167,7 @@ class ProductsController extends Controller
         }
 
         $vendor  = Vendors::where(['client_id' => $userConnected->id])->first();
-        $product = Product::where(['id' => $request->product_id])->first();
+        $product = Products::where(['id' => $request->product_id])->first();
 
         if($product->vendors_id !== $vendor->id){
             return new JsonResponse([
@@ -203,7 +199,7 @@ class ProductsController extends Controller
     }
 
     public function getBestProductsSold(){
-        $products = Product::orderBy('quantity', 'desc')->get();
+        $products = Products::orderBy('quantity', 'desc')->get();
 
         foreach($products as $product){
             if($product->url_img === null){

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ImagesProducts;
-use App\Models\Product;
+use App\Models\Products;
 use App\Models\Vendors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -60,7 +60,7 @@ class MediasController extends Controller
         $imageName = time().'.'.$request->image->extension();  
         $request->image->move(public_path('images/products'), $imageName);
         if($request->default){
-            $success = Product::where('vendor_id', $vendor->id)->update([
+            $success = Products::where('vendor_id', $vendor->id)->update([
                 'url_img' => '/images/products/' . $imageName
             ]);
             if(!$success){
