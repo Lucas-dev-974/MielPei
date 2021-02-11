@@ -2,7 +2,7 @@
     <v-card color="grey lighten-4" flat height="auto" tile>
     <v-toolbar dense>
       <v-toolbar-title class="mr-4 fs-4">MielPeï</v-toolbar-title>
-      <v-btn class="small" v-if="user_roles === 'user'" small elevation="1" color="">Devenir vendeur</v-btn>
+      
       <v-spacer></v-spacer>
 
       <div v-if='!isConnected'>
@@ -22,10 +22,14 @@
                 <v-list-item-title class="text-center my-2" v-if="user_roles === 'vendor'">
                     <a href="/ma-boutique" class=" text-decoration-none mt-1">Ma boutique</a> 
                 </v-list-item-title>
+                 <v-list-item-title class="text-center">
+                    <a href="#" class=" text-decoration-none mt-1" v-if="user_roles === 'user'" small elevation="1" color="">Devenir vendeur</a>
+                </v-list-item-title>
                 <v-divider inset></v-divider>
                 <v-list-item-title class="text-center">                               
                     <a href="#" class="text-danger text-decoration-none mt-1" @click="logout">Déconnexion</a> 
                 </v-list-item-title>
+               
             </v-list-item-content>
         </v-list>
     </v-menu>

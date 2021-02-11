@@ -18,7 +18,6 @@ export default{
 
     created() {
        this.isConnected();
-       console.log(this.isConnecta);
     },
 
     methods: {
