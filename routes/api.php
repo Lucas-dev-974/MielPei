@@ -102,3 +102,7 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     Route::post('disable-users-account', [UsersController::class, 'disable_UserAccount']); // 2 tranchant, active et désactive un compte user
     Route::post('update-users-role', [UsersController::class, 'update_UserRole']);
 });
+
+Route::middleware('auth')->prefix('products')->group(function(){
+    Route::get('get-my-products', [ProductsController::class, 'getVendorProducts']);
+});
