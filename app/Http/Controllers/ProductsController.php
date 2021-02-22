@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductsController extends Controller
 {
-    
+    public function __construct()
+    {
+        $this->user = $this->isConnected();
+    }
     public function add(Request $request){
         // if($userConnected === false){
         //     return response()->json([
@@ -22,14 +25,14 @@ class ProductsController extends Controller
         // }
         $userConnected = $this->isConnected();
         $validator = Validator::make($request->all(), [
-            'price' => 'required|integer',
+            'price' => 'required|numeric',
             'details' => 'required|string',
             'quantity' => 'required|integer',
             'name'     => 'required|string'
         ]);
 
         if($validator->fails()){
-            return new JsonResponse([
+            return response()->json([
                 'success' => false,
                 'error'   => $validator->errors()
             ]);
@@ -52,7 +55,7 @@ class ProductsController extends Controller
         $product->quantity = $request->quantity;
 
         $product->save();
-        return $product;
+        return \response()->json(['success' => true, 'product' => $product]);
     }
 
     public function update(Request $request){
@@ -95,54 +98,57 @@ class ProductsController extends Controller
                 }
                 $product = Products::where(['id' => $request->product_id])->update(['price' => $request->value]);
                 return response()->json([
-                    'succes' => true
+                    'success' => true
                 ]);
                 break;
 
             case 'quantity':
-                $quantity = Products::where(['id' => $request->product_id])->first()->quantity;
                 $option = explode(':', $request->value);
-
-                if(!intval($option[1])){
-                    return response()->json([
-                        'success' => false,
-                        'error'   => 'Seul un nombre est autorisé !'
-                    ]);
-                }
-                if(sizeof($option) < 2){
-                    return response()->json([
-                        'success' => false,
-                        'error'   => 'des options son manquante !'
+                if(sizeof($option) > 1){
+                    
+                    if(!intval($option[1])){
+                        return response()->json([
+                            'success' => false,
+                            'error'   => 'Seul un nombre est autorisé !'
                         ]);
+                    }
+                    $quantity = Products::where(['id' => $request->product_id])->first()->quantity;
+                    if($option[0] === "+"){
+                        $quantity += intval($option[1]);
+                    }elseif($option[0] == '-' ){
+                        $quantity -= intval($option[1]);
+                    }                    
+                    $product = Products::where(['id' => $request->product_id])->update(['quantity' => $quantity]);
+                }else{  
+                    $product = Products::where(['id' => $request->product_id])->update(['quantity' => $request->value]);
                 }
-                if($option[0] === "+"){
-                    $quantity += intval($option[1]);
-                }elseif($option[0] == '-' ){
-                    $quantity -= intval($option[1]);
-                }else{
-                    return response()->json([
-                        'success' => false,
-                        'error'   => 'option non reconnue !'
-                    ]);
-                }
-
-                $product = Products::where(['id' => $request->product_id])->update(['quantity' => $quantity]);
                 return response()->json([
-                    'succes' => true
+                    'success' => true
                 ]);
                 break;
             
             case 'details':
                 $product = Products::where(['id' => $request->product_id])->update(['details' => $request->value]);
                 return response()->json([
-                    'succes' => true
+                    'success' => true
                 ]);
                 break;
+            
+            case 'name':
+                $update = $this->user->vendor->products()->where('id', $request->product_id)->update(['name' => $request->value]);
+                if(!$update){
+                    return response()->json([
+                        'success' => false,
+                        'error'   => 'une erreur est survenue'
+                    ]);
+                }
+
+                return response()->json(['success' => true]);
 
             default:
                 return response()->json([
                     'success' => false,
-                    'error'   => 'non de la table non reconnue !'
+                    'error'   => 'nom de la table non reconnue !'
                 ]);
                 break;
         }
@@ -199,13 +205,20 @@ class ProductsController extends Controller
     }
 
     public function getBestProductsSold(){
-        $products = Products::orderBy('quantity', 'desc')->get();
+        $products = Products::orderBy('total_sold', 'desc')->get();
 
         foreach($products as $product){
             if($product->url_img === null){
                 $product->url_img = '/images/products/default.jpg';
             }
         }
-        return $products;
+        return response()->json(['success' => true, 'products' => $products]);
+    }
+
+    public function getVendorProducts(){
+        $user = $this->isConnected();
+        $vendor = $user->vendor;
+        $products = $vendor->products;
+        return response()->json(['success' => true, 'products' => $products]);
     }
 }

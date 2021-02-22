@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Products;
 use App\Models\ShoppingCard;
+use App\Models\Vendors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -19,7 +21,11 @@ class ShoppingCardController extends Controller
         }
         
         $cards = DB::table('shopping_card')->where('clients_id', $userConnected->id)->where('isBuyed', true)->get();
-        return $cards;
+        foreach($cards as $card){
+            $card->product_id = Products::find($card->product_id)->first();
+            $card->vendor_id  = Vendors::find($card->vendor_id)->first();
+        }
+        return response()->json(['success' => true, 'cards' => $cards]);
     }
     
     // Récupère la liste des produits qui son dans le panier (produit non acheter)
@@ -31,7 +37,11 @@ class ShoppingCardController extends Controller
             ]) ;
         }
         $cards = DB::table('shopping_card')->where('clients_id', $userConnected->id)->where('isBuyed', false)->get();
-        return $cards;
+        foreach($cards as $card){
+            $card->product_id = Products::where('id', $card->product_id)->first();
+            $card->vendor_id  = Vendors::where('id',  $card->vendor_id)->first();
+        }
+        return response()->json(['success' => true, 'cards' => $cards]);
     }
 
     public function removeToCard(Request $request){
@@ -82,11 +92,11 @@ class ShoppingCardController extends Controller
             'vendor_id' => 'required|integer',
             'quantity'    => 'required|integer',
             'product_id' => 'required|integer',
-            'final_price' =>'required',
+            'price' =>'required|numeric',
 
         ]);
 
-        if($validator->fails() || !is_numeric($request->final_price)){
+        if($validator->fails()){
             return response()->json([
                 'success' => false,
                 'error'   => $validator->errors()
@@ -99,17 +109,19 @@ class ShoppingCardController extends Controller
                 'error'   => 'Le produit renseigner n\'existe pas !'
             ]);
         }
-
         
+        // $insertion = ShoppingCard::create(array_merge(
+        //     $validator->validated(),
+        //     [ 'clients_id' => $userConnected->id, 'isBuyed' => false]
+        // ));
         DB::table('shopping_card')->insert([
             'vendor_id' => $request->vendor_id,
             'clients_id' => $userConnected->id,
             'product_id' => $request->product_id,
             'quantity'   => $request->quantity,
-            'final_price' => $request->final_price,
+            'final_price' => $request->quantity * $request->price,
             'isBuyed'   => false,
         ]);
-        
         return response()->json([
             'success' => true,
         ]);

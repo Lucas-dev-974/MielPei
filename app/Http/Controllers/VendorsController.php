@@ -149,7 +149,7 @@ class VendorsController extends Controller
         if(!$vendor){
             return response()->json([
                 'success' => false,
-                'error'   => 'vous n\'ete pas le vendeur'
+                'error'   => 'vous n\'ete pas vendeur'
             ]);
         }
         
