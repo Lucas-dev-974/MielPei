@@ -2,6 +2,7 @@ import Axios from "axios";
 import DeleteUser from '../../components/delete-user-modal.vue'
 import UpdateUser from '../../components/update-user-modal.vue'
 import Alert from '../../../services/alert.vue'
+
 export default{
     components:{
         DeleteUser,

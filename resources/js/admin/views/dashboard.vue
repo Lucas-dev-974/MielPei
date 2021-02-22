@@ -18,29 +18,29 @@
             </v-tabs>
             <v-simple-table>
                 <template v-slot:default>
-                <thead>
-                    <tr>
-                        <th class="text-left"> Nom </th>
-                        <th class="text-left"> Prenom  </th>
-                        <th class="text-left"> Email  </th>
-                        <th class="text-left"> Phone  </th>
-                        <th class="text-left"> Role  </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="user in users" :key="user.id">
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.last_name }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.phone }}</td>
-                        <td>{{ user.role }}</td>
-                        <td class="d-flex justify-content-around">
-                            <updateUser :user='user' :alert='alert' @updateList='getUsersList' />
-                            <deleteUser :user='user' @updateList='getUsersList' />
-                            <v-switch style="top: -5;" color="success" @change="updateActiveAccount(user.id, user.active_account)" v-model="user.active_account" :label="`compte activé: ${user.active_account.toString()}`" ></v-switch>
-                        </td>
-                    </tr>
-                </tbody>
+                    <thead>
+                        <tr>
+                            <th class="text-left"> Nom </th>
+                            <th class="text-left"> Prenom  </th>
+                            <th class="text-left"> Email  </th>
+                            <th class="text-left"> Phone  </th>
+                            <th class="text-left"> Role  </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="user in users" :key="user.id">
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phone }}</td>
+                            <td>{{ user.role }}</td>
+                            <td class="d-flex justify-content-around">
+                                <updateUser :user='user' :alert='alert' @updateList='getUsersList' />
+                                <deleteUser :user='user' @updateList='getUsersList' />
+                                <v-switch style="top: -5;" color="success" @change="updateActiveAccount(user.id, user.active_account)" v-model="user.active_account" :label="`compte activé: ${user.active_account.toString()}`" ></v-switch>
+                            </td>
+                        </tr>
+                    </tbody>
                 </template>
             </v-simple-table>
 

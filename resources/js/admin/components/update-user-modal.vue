@@ -29,8 +29,6 @@
                     @change="updateUserRole"
                     ></v-select>
                 </div>
-
-                
             </div>
         </v-card>
     </v-dialog>
