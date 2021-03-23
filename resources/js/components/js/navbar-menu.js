@@ -2,6 +2,11 @@ import Axios from "axios"
 import { unset } from "lodash"
 
 export default{
+    props: {
+        isConnect: {
+            required: true
+        }
+    },
     
     data() {
         return {

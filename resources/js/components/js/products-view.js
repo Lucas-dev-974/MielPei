@@ -27,7 +27,7 @@ export default{
     addToShoppingCard(){
         console.log(this.product.id);
         Axios.post('/api/shopping-card/add', {
-            vendor_id: this.product.vendors_id,
+            vendor_id: this.product.vendor_id,
             quantity: this.selection,
             product_id: this.product.id,
             price: this.product.price

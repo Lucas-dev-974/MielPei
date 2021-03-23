@@ -1,11 +1,6 @@
 <template>
   <div class="">
-    <NavBar />
-    <v-tabs  centered >
-        <v-tab @click="pages='home'; setDefaultPages()">Acceuil</v-tab>
-        <v-tab @click="pages='vendor'; setDefaultPages()">Nos Producteurs</v-tab>
-        <v-tab v-if="isConnect" @click="pages='account'; setDefaultPages()">Mon compte</v-tab>
-    </v-tabs>
+    <NavBar @setDefaultPages="setDefaultPages" :isConnect="isConnect"/>
     <v-container v-if="pages === 'home'" >
       <v-row style="height: 450px"  >
           <h3 class="text-center my-2">Découvrez les points de vente de nos agriculteurs</h3>  
@@ -24,7 +19,7 @@
     </v-container>    
 
     <div v-if="pages === 'account'">
-       <Account :user='user' :panier='panier' @updatePanier='updatePanier'/> 
+       <Account :user='user' :panier='panier' /> 
     </div>
   </div>
 

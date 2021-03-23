@@ -33,7 +33,7 @@ export default{
 
     created() {
        this.isConnected();
-       
+
     },
 
     mounted() {
@@ -49,22 +49,16 @@ export default{
         isConnected: function(){
             Axios.get('/api/auth/validToken')
             .then(({data}) => {
-                if(!data.success){
+                if(!data.success){ // Si le token n'est plus valide
                     this.isConnect = false
+                    localStorage.setItem('defaultPages', 'home')
                 }
                 if(data.success){
                     this.isConnect = true
                     this.user = data.user
-                    if(data.user.role == 'vendor' || data.user.role == 'admin'){
-                        this.getVendor()
-                    }
+                    console.log('------------');
+                    console.log(this.user);
                 }
-            })
-        },
-
-        getVendor: function(){
-            Axios.get('/api/vendors/get').then(({data}) => {
-                this.user.vendor = data.vendor
             })
         },
 
@@ -74,7 +68,8 @@ export default{
             Axios.post('/api/auth/logout')
         },
 
-        setDefaultPages: function(){
+        setDefaultPages: function(page){
+            this.pages = page
             localStorage.setItem('defaultPages', this.pages)
         },
 

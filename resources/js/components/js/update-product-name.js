@@ -17,6 +17,13 @@ export default{
         }
     },
 
+    mounted() {
+        this.newName = this.product.name
+        this.newQuantity = this.product.quantity
+        this.newPrice    = this.product.price
+        this.newDetails  = this.product.details
+    },
+
     methods: {
         updateName(){
             Axios.post('/api/products/update', {row_name: 'name', value: this.newName, product_id: this.product.id})
@@ -24,6 +31,7 @@ export default{
                 if(data.success){
                     this.modal = false
                     this.$emit('getVendorProducts')
+                    this.product.name = this.newName
                 }
             })
         },
@@ -39,26 +47,35 @@ export default{
         },
 
         updatePrice(){
-            console.log('price')
-            Axios.post('/api/products/update', {row_name: 'price', value: this.newPrice, product_id: this.product.id})
-            .then(({data}) => {
-                console.log(data);
-                if(data.success){
-                    this.modal = false
-                    this.$emit('getVendorProducts')
-                }
-            })
+            if(this.newPrice > 0){
+                Axios.post('/api/products/update', {row_name: 'price', value: this.newPrice, product_id: this.product.id})
+                .then(({data}) => {
+                    console.log(data);
+                    if(data.success){
+                        this.modal = false
+                        this.$emit('getVendorProducts')
+                    }
+                })
+            }else{
+                console.log("Impossible de définir un prix négatif");
+            }
+
         },
 
         updateQuantity(){   
-            Axios.post('/api/products/update', {row_name: 'quantity', value: this.newQuantity, product_id: this.product.id})
-            .then(({data}) => {
-                console.log(data);
-                if(data.success){
-                    this.modal = false
-                    this.$emit('getVendorProducts')
-                }
-            })
+            if(this.newQuantity > 0){
+                Axios.post('/api/products/update', {row_name: 'quantity', value: this.newQuantity, product_id: this.product.id})
+                .then(({data}) => {
+                    console.log(data);
+                    if(data.success){
+                        this.modal = false
+                        this.$emit('getVendorProducts')
+                    }
+                })
+            }else{
+                console.log("Impossible de définir une quantité");
+            }
+
         }
     },
 }

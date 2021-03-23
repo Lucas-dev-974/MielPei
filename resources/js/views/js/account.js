@@ -1,18 +1,16 @@
 import VendorDash from '../profile/vendor_dashboard.vue'
 import Commands   from '../profile/commands.vue'
 import ShoppingCart from '../profile/shopping_cart.vue'
+import BecomeVendor from '../../components/become-vendor.vue'
 
 export default{
 
     components:{
-        VendorDash,
-        Commands,
-        ShoppingCart,
+        VendorDash, Commands, ShoppingCart, BecomeVendor
     },
 
     props:{
-        user:{ required: true }, 
-        panier: { required:true }
+        user:   { required: true }
     },
 
     data() {
@@ -21,6 +19,11 @@ export default{
             profile: true,
             
         }
+    },
+
+    mounted() {
+        console.log("panier");
+        console.log(this.panier);
     },
 
     methods: {

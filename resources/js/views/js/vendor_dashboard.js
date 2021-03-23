@@ -13,7 +13,7 @@ export default{
     },
 
     props:{
-        vendor: {
+        user: {
             required: true
         },
     },
@@ -30,17 +30,17 @@ export default{
     },
 
     mounted() {
-        this.getVendorProducts()
+        this.get_Products()
+        console.log(this.vendor);
     },
 
 
     methods: {
-        getVendorProducts: function(){
+        get_Products: function(){
             this.products = []
-            Axios.get('/api/products/get-my-products').then(({data}) => {
-                console.log(data);
+            Axios.get('/api/products/get-my-products')
+            .then(({data}) => {
                 this.products = data.products
-                console.log(this.products);
             })
         },
 

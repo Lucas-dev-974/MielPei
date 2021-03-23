@@ -16,6 +16,10 @@
             </div>
         </div>
 
+        <div v-if="user.role === 'user'">
+            <BecomeVendor />
+        </div>
+        
         <div class="d-flex">
             <!-- Navigation -->
             <div class="d-flex justify-content-around" style="position: absolute !important;">
@@ -28,7 +32,7 @@
         </div>
 
         <div class="" style="padding-top: 1.8em; padding-left: 1em" v-if="page == 'panier'">
-                <ShoppingCart @updatePanier='updatePanier' :panier='panier'/>
+                <ShoppingCart @updatePanier='updatePanier'/>
             </div>
 
             <div class="" style="padding-top: 1.8em; padding-left: 1em" v-if="page == 'commands'">
@@ -36,7 +40,7 @@
             </div>
 
             <div class="" style="padding-top: 1.8em; padding-left: 1em" v-if="page == 'boutique'">
-                <VendorDash :vendor="user.vendor"  />
+                <VendorDash :user="user"  />
             </div>
     </v-container>
 </template>
