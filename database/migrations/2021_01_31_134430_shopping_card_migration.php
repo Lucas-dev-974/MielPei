@@ -13,9 +13,9 @@ class ShoppingCardMigration extends Migration
      */
     public function up()
     {
-        Schema::create('shopping_card', function (Blueprint $table) {
+        Schema::create('shopping_cards', function (Blueprint $table) {
             $table->id();
-            $table->integer('clients_id')->unsigned();
+            $table->integer('client_id')->unsigned();
             $table->integer('vendor_id')->unsigned();
             $table->integer('product_id')->unsigned();
             $table->integer('quantity');

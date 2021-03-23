@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class VendorsMigration extends Migration
+class VendorDetailsMigration extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class VendorsMigration extends Migration
      */
     public function up()
     {
-        Schema::create('vendors', function (Blueprint $table) {
+        Schema::create('vendor_details', function (Blueprint $table) {
             $table->id();
-            $table->integer('client_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->json('cultur_coordinate')->nullable();
             $table->string('shop_name');
             $table->string('profile_img_url')->nullable();
@@ -30,6 +30,6 @@ class VendorsMigration extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vendors');
+        Schema::dropIfExists('vendor_details');
     }
 }
