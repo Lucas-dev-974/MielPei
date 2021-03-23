@@ -68,10 +68,10 @@ Route::group([
     'middleware' => 'api',
     'prefix'     => 'shopping-card'
 ], function ($router) {
-    Route::post('add', [ShoppingCardController::class, 'add']);
-    Route::get('get-buyed-products', [ShoppingCardController::class, 'getBuyedCard']);
+Route::post('add',                       [ShoppingCardController::class, 'add']);
+    Route::get('get-buyed-products',     [ShoppingCardController::class, 'getBuyedCard']);
     Route::get('get-non-buyed-products', [ShoppingCardController::class, 'getNonBuyedCard']);
-    Route::post('remove-to-card', [ShoppingCardController::class, 'removeToCard']);
+    Route::post('remove-to-card',        [ShoppingCardController::class, 'removeToCard']);
 });
 
 
