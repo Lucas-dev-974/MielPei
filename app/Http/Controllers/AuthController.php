@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\VendorDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -44,15 +45,16 @@ class AuthController extends Controller
         }
         
         $user = User::where('email', $request->email)->first();
+        if($user->role === "vendor"){ // Si l'utilisateur est un producteur
+            $vendor = VendorDetails::where('user_id', $user->id)->first();
+            $user->vendor = $vendor;
+        }
+        
         if(!$user->active_account){
             return response()->json([
                 'success' => false,
                 'error'   => 'votre compte à été bloquer par l\'admin du site'
             ]);
-        }
-        $vendor = $this->vendorExist($user->id);
-        if($vendor){
-            $user->vendor =  $vendor;
         }
         return response()->json([
             'user' => $user,
@@ -118,16 +120,21 @@ class AuthController extends Controller
      */
     public function validToken()
     {
-        $userConnected = $this->isConnected();
-        if(!$userConnected){
+        $user = $this->isConnected();
+        if(!$user){
             return response()->json([
                 'success' => false,
                 'error'   => 'votre token est invalide, veuillez vous connecté'
             ]);
         }
+
+        if($user->role === "vendor"){
+            $vendor = VendorDetails::where('user_id', $user->id)->first();
+            $user->vendor = $vendor;
+        }
         return  response()->json([
             'success' => true,
-            'user'    => $userConnected
+            'user'    => $user
         ]);
     }
 

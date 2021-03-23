@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\VendorDetails;
 use App\Models\Vendors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -82,7 +83,7 @@ class UsersController extends Controller
         switch($request->user_new_role){
             case 'vendor':
                 if(!$the_user->vendor){
-                    $created_state = Vendors::create([
+                    $created_state = VendorDetails::create([
                         'shop_name' => 'boutique créer par l\'admin',
                         'client_id' => $request->user_id
                     ]);
@@ -94,7 +95,7 @@ class UsersController extends Controller
                 if($the_user->role === 'vendor'){
                     $the_user->vendor->products()->delete();
                 
-                    $delete_state = Vendors::where('client_id', $the_user->id)->delete();
+                    $delete_state = VendorDetails::where('client_id', $the_user->id)->delete();
                     (!$delete_state) ? abort(response()->json([ 'success' => false, 'error'   => 'supression de du vendeur échoué'])) : false;
                 }
                 break;

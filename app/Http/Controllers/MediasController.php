@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ImagesProducts;
 use App\Models\Products;
+use App\Models\VendorDetails;
 use App\Models\Vendors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -21,18 +22,18 @@ class MediasController extends Controller
             'product_id' => 'required|integer'
         ]);
 
-        $user = $this->isConnected();
+        $user = $this->isCoénnected();
         if(!$user){
             return response()->json([
                 'success' => false,
                 'error'   => 'Veuillez vous connecté !'
             ]);
         }
-        $vendor = $this->vendorExist($user->id);
-        if(!$vendor){
+        $user = $this->userIsVendor($user);
+        if($user->role === 'user'){
             return response()->json([
                 'success' => false,
-                'error'   => 'Vous devez être vendeur pour effectué cet action !'
+                'error'   => 'vous n\'ete pas vendeur'
             ]);
         }
 
@@ -50,7 +51,7 @@ class MediasController extends Controller
                 'error'   => 'désolé, le produit n\'existe pas'
             ]);
         }
-        if($product->vendors_id !== $vendor->id){
+        if($product->vendors_id !== $user->vendor->id){
             return response()->json([
                 'success' => false,
                 'error'   => 'désolé, le produit n\'est pas à vous, vous ne pouvez le modifié'
@@ -60,7 +61,7 @@ class MediasController extends Controller
         $imageName = time().'.'.$request->image->extension();  
         $request->image->move(public_path('images/products'), $imageName);
         if($request->default){
-            $success = Products::where('vendor_id', $vendor->id)->update([
+            $success = Products::where('vendor_id', $user->vendor->id)->update([
                 'url_img' => '/images/products/' . $imageName
             ]);
             if(!$success){
@@ -118,7 +119,7 @@ class MediasController extends Controller
 
         $imageName = time().'.'.$request->image->extension();  
         $request->image->move(public_path('images/vendors/profiles-medias'), $imageName);
-        $data = Vendors::where('client_id', $user->id)->update(['profile_img_url' => '/images/vendors/profiles-medias/' . $imageName]);
+        $data = VendorDetails::where('client_id', $user->id)->update(['profile_img_url' => '/images/vendors/profiles-medias/' . $imageName]);
         if(!$data){
             return response()->json([
                 'success' => false,

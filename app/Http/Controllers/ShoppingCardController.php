@@ -13,46 +13,52 @@ class ShoppingCardController extends Controller
 {
     
     public function getBuyedCard(){
-        $userConnected = $this->isConnected();
-        if($userConnected === false){
+        $user = $this->isConnected();
+        if($user === false){
             return response()->json([
                 'error' => 'veuillez vous connecter'
             ]) ;
         }
         
-        $cards = DB::table('shopping_card')->where('clients_id', $userConnected->id)->where('isBuyed', true)->get();
+        $cards = DB::table('shopping_card')->where('client_id', $user->id)->where('isBuyed', true)->get();
         foreach($cards as $card){
             $card->product_id = Products::find($card->product_id)->first();
-            $card->vendor_id  = Vendors::find($card->vendor_id)->first();
+            // $card->vendor_id  = User::find($card->vendor_id)->first();
         }
         return response()->json(['success' => true, 'cards' => $cards]);
     }
     
     // Récupère la liste des produits qui son dans le panier (produit non acheter)
     public function getNonBuyedCard(){
-        $userConnected = $this->isConnected();
-        if($userConnected === false){
+        $user = $this->isConnected();
+        if($user === false){
             return response()->json([
                 'error' => 'veuillez vous connecter'
             ]) ;
         }
-        $cards = DB::table('shopping_card')->where('clients_id', $userConnected->id)->where('isBuyed', false)->get();
-        foreach($cards as $card){
-            $card->product_id = Products::where('id', $card->product_id)->first();
-            $card->vendor_id  = Vendors::where('id',  $card->vendor_id)->first();
+
+        $cards = ShoppingCard::where('client_id', $user->id)
+                             ->where('isBuyed', false)->get(); 
+        
+        if(strlen($cards) > 0){
+            foreach($cards as $card){
+                $card->product_id = Products::find($card->product_id);
+                $card->product_id->img_url = ($card->product_id->img_url == null) ? "/images/products/default.jpg" : $card->product_id->img_url ;
+            }
         }
+
         return response()->json(['success' => true, 'cards' => $cards]);
     }
 
     public function removeToCard(Request $request){
-        $userConnected = $this->isConnected();
-        if($userConnected === false){
+        $user = $this->isConnected();
+        if($user === false){
             return response()->json([
                 'error' => 'veuillez vous connecter'
             ]) ;
         }
         $validator = Validator::make($request->all(), [
-            'product_id' => 'required|integer',
+            'card_id' => 'required|integer',
         ]);
 
         if($validator->fails()){
@@ -62,15 +68,8 @@ class ShoppingCardController extends Controller
             ]);
         }
 
-        if(!$this->productExist($request->product_id)){
-            return response()->json([
-                'success' => false,
-                'error'   => 'Vous ne pouvez pas retirer du panier un produit qui n\'existe pas/plus'
-            ]);
-        }
-
-        $data = DB::table('shopping_card')->where('id', $request->product_id)->delete();
-        if($data === 0){
+        $deleted = ShoppingCard::where('id', $request->card_id)->delete();
+        if($deleted === 0){
             return response()->json([
                 'success' => false,
                 'error'   => 'Aucun produit trouver dans le panier. Impossible de supprimer'
@@ -82,8 +81,8 @@ class ShoppingCardController extends Controller
     }
 
     public function add(Request $request){
-        $userConnected = $this->isConnected();
-        if($userConnected === false){
+        $user = $this->isConnected();
+        if($user === false){
             return response()->json([
                 'error' => 'veuillez vous connecter'
             ]) ;
@@ -109,19 +108,23 @@ class ShoppingCardController extends Controller
                 'error'   => 'Le produit renseigner n\'existe pas !'
             ]);
         }
-        
-        // $insertion = ShoppingCard::create(array_merge(
-        //     $validator->validated(),
-        //     [ 'clients_id' => $userConnected->id, 'isBuyed' => false]
-        // ));
-        DB::table('shopping_card')->insert([
-            'vendor_id' => $request->vendor_id,
-            'clients_id' => $userConnected->id,
-            'product_id' => $request->product_id,
-            'quantity'   => $request->quantity,
-            'final_price' => $request->quantity * $request->price,
-            'isBuyed'   => false,
-        ]);
+
+        $card = new ShoppingCard();
+        $card->vendor_id = $request->vendor_id;
+        $card->client_id = $user->id;
+        $card->product_id = $request->product_id;
+        $card->quantity   = $request->quantity;
+        $card->final_price = $request->quantity * $request->price;
+        $card->isBuyed     = false;
+        $card->save();
+        // DB::table('shopping_card')->insert([
+        //     'vendor_id' => $request->vendor_id,
+        //     'clients_id' => $user->id,
+        //     'product_id' => $request->product_id,
+        //     'quantity'   => $request->quantity,
+        //     'final_price' => $request->quantity * $request->price,
+        //     'isBuyed'   => false,
+        // ]);
         return response()->json([
             'success' => true,
         ]);

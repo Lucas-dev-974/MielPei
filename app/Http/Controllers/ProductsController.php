@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Products;
 use App\Models\User;
+use App\Models\VendorDetails;
 use App\Models\Vendors;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,18 +13,12 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductsController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(){
         $this->user = $this->isConnected();
     }
+
     public function add(Request $request){
-        // if($userConnected === false){
-        //     return response()->json([
-        //         'success' => false,
-        //         'error' => 'veuillez vous connecter'
-        //     ]) ;
-        // }
-        $userConnected = $this->isConnected();
+        $user = $this->isConnected();
         $validator = Validator::make($request->all(), [
             'price' => 'required|numeric',
             'details' => 'required|string',
@@ -38,17 +33,16 @@ class ProductsController extends Controller
             ]);
         }
         
-        if($userConnected->role !== 'vendor'){
+        if($user->role === 'user'){
             return response()->json([
                 'success' => false,
                 'error'   => 'vous devez être vendeur pour ajouter un produit !'
             ]);
         }
-        $vendor = User::find($userConnected->id)->vendor;   
-        
+        $user = $this->userIsVendor($user);   
         $product = new Products();
-
-        $product->vendors_id = $vendor->id;
+        
+        $product->vendor_id = $user->vendor->id;
         $product->price = $request->price;
         $product->name  = $request->name;
         $product->details = $request->details;
@@ -59,8 +53,8 @@ class ProductsController extends Controller
     }
 
     public function update(Request $request){
-        $userConnected = $this->isConnected();
-        if($userConnected === false){
+        $user = $this->isConnected();
+        if($user === false){
             return response()->json([
                 'error' => 'veuillez vous connecter'
             ]) ;
@@ -78,10 +72,11 @@ class ProductsController extends Controller
             ]);
         }
 
-        $vendor = Vendors::where(['client_id' => $userConnected->id])->first();
+        $vendor = $this->userIsVendor($user)->vendor;
+
         $product = Products::where(['id' => $request->product_id])->first();
 
-        if($product->vendors_id !== $vendor->id){
+        if($product->vendor_id !== $vendor->id){
             return new JsonResponse([
                 'success' => false,
                 'error'   => 'Vous n\'ête pas le vendeur de cet article !'
@@ -96,14 +91,20 @@ class ProductsController extends Controller
                         'error'   => 'Seul un nombre est autorisé !'
                     ]);
                 }
-                $product = Products::where(['id' => $request->product_id])->update(['price' => $request->value]);
-                return response()->json([
-                    'success' => true
-                ]);
+                $update = Products::where(['id' => $request->product_id])->update(['price' => $request->value]);
+                if(!$update){
+                    return response()->json(["success" => false, "errors" => "Une erreur est survenue lors de la mise a jour du produit"]);
+                }else{
+                    return response()->json([
+                        'success' => true
+                    ]);
+                }
+
                 break;
 
             case 'quantity':
                 $option = explode(':', $request->value);
+                
                 if(sizeof($option) > 1){
                     
                     if(!intval($option[1])){
@@ -128,14 +129,18 @@ class ProductsController extends Controller
                 break;
             
             case 'details':
-                $product = Products::where(['id' => $request->product_id])->update(['details' => $request->value]);
-                return response()->json([
-                    'success' => true
-                ]);
+                $update = Products::where(['id' => $request->product_id])->update(['details' => $request->value]);
+                if(!$update){
+                    return response()->json(["success" => false, "errors" => "Une erreur est survenue lors de la mise a jour du produit"]);
+                }else{
+                    return response()->json([
+                        'success' => true
+                    ]);
+                }
                 break;
             
             case 'name':
-                $update = $this->user->vendor->products()->where('id', $request->product_id)->update(['name' => $request->value]);
+                $update =  Products::where(['id' => $request->product_id])->update(['name' => $request->value]);
                 if(!$update){
                     return response()->json([
                         'success' => false,
@@ -155,8 +160,8 @@ class ProductsController extends Controller
     }
 
     public function delete(Request $request){
-        $userConnected = $this->isConnected();
-        if($userConnected === false){
+        $user = $this->isConnected();
+        if($user === false){
             return response()->json([
                 'error' => 'veuillez vous connecter'
             ]) ;
@@ -172,10 +177,10 @@ class ProductsController extends Controller
             ]);
         }
 
-        $vendor  = Vendors::where(['client_id' => $userConnected->id])->first();
+        $vendor  = $this->userIsVendor($user)->vendor;
         $product = Products::where(['id' => $request->product_id])->first();
 
-        if($product->vendors_id !== $vendor->id){
+        if($product->vendor_id !== $vendor->id){
             return new JsonResponse([
                 'success' => false,
                 'error'   => 'Vous n\'ête pas le vendeur de cet article !'
@@ -200,7 +205,8 @@ class ProductsController extends Controller
             ]);
         }
 
-        $products = DB::table('products')->get();
+        $products = Products::get();
+        // $products = DB::table('products')->get();
         return $products;
     }
 
@@ -215,10 +221,10 @@ class ProductsController extends Controller
         return response()->json(['success' => true, 'products' => $products]);
     }
 
-    public function getVendorProducts(){
+    public function getVendorProducts(Request $request){
         $user = $this->isConnected();
-        $vendor = $user->vendor;
-        $products = $vendor->products;
+        $user = $this->userIsVendor($user);
+        $products = Products::where('vendor_id', $user->vendor->id)->get();
         return response()->json(['success' => true, 'products' => $products]);
     }
 }

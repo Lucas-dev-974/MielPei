@@ -14,11 +14,9 @@ class Products extends Model
         'quantity',
         'details',
         'vendors_id'
-
     ];
 
-
     public function vendor(){
-        return $this->belongsTo(Vendors::class);
+        return $this->belongsTo(User::class);
     }
 }

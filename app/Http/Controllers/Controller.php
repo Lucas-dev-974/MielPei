@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Products;
 use App\Models\ShoppingCard;
 use App\Models\User;
-use App\Models\Vendors;
+use App\Models\VendorDetails;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -13,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 
-class Controller extends BaseController
+ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
@@ -26,12 +26,13 @@ class Controller extends BaseController
         }
     }
 
-    public function vendorExist($client_id){
-        $vendor = Vendors::where('client_id', $client_id)->first();
-        if(!$vendor){
+    public function userIsVendor($user){
+        if($user->role != 'vendor'){
             return false;
         }
-        return $vendor;
+        $vendor = VendorDetails::where('user_id', $user->id)->select(['id', 'cultur_coordinate', 'shop_name', 'profile_img_url'])->get();
+        $user->vendor = $vendor[0];
+        return $user;
     }
 
     public function clientExist($client_id){
