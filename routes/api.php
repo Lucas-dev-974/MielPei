@@ -56,7 +56,7 @@ Route::group([
     'prefix'     => 'products'
 ], function ($router) {
     Route::get('get-best-products-sold', [ProductsController::class, 'getBestProductsSold']);
-    Route::post('get',    [ProductsController::class, 'getProducts']);
+    Route::get('get',    [ProductsController::class, 'getProducts']);
     Route::post('add',    [ProductsController::class, 'add']);
     Route::post('update', [ProductsController::class, 'update']);
     Route::post('delete', [ProductsController::class, 'delete']);
@@ -82,7 +82,6 @@ Route::group([
 ], function ($router) {
     Route::post('make-command', [CommandsController::class, 'makeCommand']);
     Route::get('get', [CommandsController::class, 'get']);
-   
 });
 
 
