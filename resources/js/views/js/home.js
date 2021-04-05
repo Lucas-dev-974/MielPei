@@ -1,7 +1,7 @@
 import Axios from 'axios'
 
 // Pages
-import VendorShop from '../vendor_shop.vue'
+import ProducerProduct from '../producer_product.vue'
 import Account    from '../profile/account.vue'
 
 // Components
@@ -12,7 +12,7 @@ import ProductView from '../../components/products-view.vue'
  
 export default{
     components:{
-        VendorShop,
+        ProducerProduct,
         Account,
 
         NavBar,
@@ -31,18 +31,14 @@ export default{
         }
     },
 
-    created() {
-       this.isConnected();
-
-    },
-
     mounted() {
+        this.isConnected();
         let defaultPages = localStorage.getItem('defaultPages')
         if(defaultPages){
             this.pages = defaultPages
         }
         this.getBestProduct()
-        this.updatePanier()
+        console.log('home mounted');
     },
 
     methods: {
@@ -56,8 +52,6 @@ export default{
                 if(data.success){
                     this.isConnect = true
                     this.user = data.user
-                    console.log('------------');
-                    console.log(this.user);
                 }
             })
         },
@@ -81,16 +75,6 @@ export default{
                 }
             })
         },
-
-        updatePanier: function(){
-            this.panier = []
-            Axios.get('/api/shopping-card/get-non-buyed-products').then(({data}) => {
-                if(data.success){
-                    this.panier = data.cards
-                    console.log(this.panier);
-                }
-            })
-        }
 
         
     },

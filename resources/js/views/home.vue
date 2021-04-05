@@ -8,18 +8,21 @@
       </v-row>
 
       <v-row>
-        <p class="fs-3 text-center">Retrouvez les meilleurs produits vendue</p>
+        <p class="fs-3 mt-5 text-center">Retrouvez les meilleurs produits vendue</p>
         <template v-for="product in products">
             <v-col :key="product.id"> 
-              <ProductView :product='product' :user='user' @updatePanier='updatePanier'/>
+              <ProductView :product='product' :user='user'/>
             </v-col>
         </template>
-        
       </v-row>
     </v-container>    
 
     <div v-if="pages === 'account'">
-       <Account :user='user' :panier='panier' /> 
+       <Account :user='user'  @getBestProduct="getBestProduct" /> 
+    </div>
+
+    <div v-if="pages === 'producer_product'">
+      <ProducerProduct :user="user"/>
     </div>
   </div>
 

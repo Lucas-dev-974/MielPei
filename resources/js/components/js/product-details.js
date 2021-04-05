@@ -12,8 +12,6 @@ export default{
     },
 
     mounted() {
-        console.log('reservation');
-        console.log(this.reservation);
     },
 
     methods: {

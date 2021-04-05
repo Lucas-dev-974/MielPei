@@ -31,7 +31,6 @@ export default{
             }).catch(error => {
                 this.alert = !this.alert
                 this.alert_msg = "Email ou mot de passe incorrect"
-                console.log(error);
             })
         }
     },

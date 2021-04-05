@@ -26,7 +26,7 @@
                 <a href="#" class="nav-link " style="font-size: 12px" >
                     <span @click="page='panier'" >Panier</span> -
                     <span @click="page='commands'" >Commandes</span> 
-                    <span @click="page='boutique'" v-if="user.role !== 'user'" >- Boutique</span>
+                    <span @click="page='boutique'" @getBestProduct="$emit('getBestProduct')" v-if="user.role !== 'user'" >- Boutique</span>
                 </a>
             </div> <!-- Fin Navigation -->
         </div>

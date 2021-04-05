@@ -31,7 +31,6 @@ export default{
 
     mounted() {
         this.get_Products()
-        console.log(this.vendor);
     },
 
 

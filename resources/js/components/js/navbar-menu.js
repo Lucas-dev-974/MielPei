@@ -22,7 +22,6 @@ export default{
     methods: {
         init: function(){
             Axios.get('/api/auth/validToken').then(({data}) => {
-                console.log(data);
                 if(data.success){
                     this.isConnected = true
                     this.user_roles = data.user.role
@@ -34,7 +33,6 @@ export default{
             this.isConnected = false
             localStorage.clear()
             Axios.post('/api/auth/logout').then(({data}) => {
-                console.log(data);
                 location.href = "/"
             })
         }

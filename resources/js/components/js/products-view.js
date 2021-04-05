@@ -12,10 +12,7 @@ export default{
         }
     },
 
-    mounted() {console.log('-----');
-        console.log(this.product);
-        console.log(this.panier);
-        console.log(this.user);
+    mounted() {
     },
 
     methods: {
@@ -25,17 +22,14 @@ export default{
     },
 
     addToShoppingCard(){
-        console.log(this.product.id);
         Axios.post('/api/shopping-card/add', {
             vendor_id: this.product.vendor_id,
             quantity: this.selection,
             product_id: this.product.id,
             price: this.product.price
         }).then(({data}) => {
-            console.log(data);
             if(data.success){
                 this.reserve()
-                this.$emit('updatePanier')
             }
         })
     }

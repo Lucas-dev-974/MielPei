@@ -8,7 +8,8 @@ export default{
             last_name: '',
             phone: '',
             email: '',
-            password: ''
+            password: '',
+            password_confirm: ''
         }
     },
 
@@ -24,8 +25,16 @@ export default{
     methods: {
         register: function(){
             this.alert_msg = ''
-            Axios.post('/api/auth/register', {name: this.name, last_name: this.last_name, email: this.email, password: this.password, phone: this.phone})
+            Axios.post('/api/auth/register', {
+                name: this.name,
+                last_name: this.last_name,
+                email: this.email, 
+                password: this.password,
+                password_confirm: this.password_confirm,  
+                phone: this.phone
+            })                
             .then(({data}) => {
+                console.log(data);
                 if(!data.success){
                     this.alert = true
                     if(data.error.name){

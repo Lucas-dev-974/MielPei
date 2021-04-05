@@ -5,7 +5,7 @@
 
         <v-tabs class="" center-active>
             <v-tab @click="$emit('setDefaultPages', 'home')">Acceuil</v-tab>
-            <v-tab @click="$emit('setDefaultPages', 'vendor')">Produits producteurs</v-tab>
+            <v-tab @click="$emit('setDefaultPages', 'producer_product')">Produits producteurs</v-tab>
             <v-tab v-if="isConnect" @click="$emit('setDefaultPages', 'account')">Mon compte</v-tab>
         </v-tabs>
         

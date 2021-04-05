@@ -35,6 +35,7 @@ export default{
                 }else if(data.success){
                     this.modal = false
                     this.$emit("getVendorProducts")
+                    this.$emit('getBestProduct')
                 }
             })
         }

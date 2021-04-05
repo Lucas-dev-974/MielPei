@@ -8,7 +8,7 @@
         </div>
 
         <div class="d-flex justify-content-center">
-           <AddProdcust :alert='alert' @getVendorProducts='get_Products'/> 
+           <AddProdcust :alert='alert' @getVendorProducts='get_Products' @getBestProduct="$emit('getBestProduct')"/> 
         </div>
 
          <v-simple-table>
