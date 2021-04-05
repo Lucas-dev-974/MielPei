@@ -15,8 +15,7 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(){
         $this->middleware('auth:api', ['except' => ['login', 'register', 'validToken']]);
     }
 
@@ -27,24 +26,25 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {   
+        $errors = [];
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|min:6'
         ]);
         
-        if($validator->fails()){
-            return response()->json($validator->errors(), 400);
-        }
+        $errors +=  ($validator->fails()) ? [$validator->errors()] : [];
 
         $tokenValidity = 24 * 60;
         
         Auth::factory()->setTTL($tokenValidity);
         
-        if(!$token = Auth::attempt($validator->validated())){
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        $errors += (!$token = Auth::attempt($validator->validated())) ? ["Email ou mot de passe incorrecte"] : [];
+        // Si il y'a des erreurs, alors on retourne les erreurs
+        (sizeof($errors) != 0) ? abort(response()->json(["statu" => false, "errors" => $errors])) : null;
+
         
         $user = User::where('email', $request->email)->first();
+
         if($user->role === "vendor"){ // Si l'utilisateur est un producteur
             $vendor = VendorDetails::where('user_id', $user->id)->first();
             $user->vendor = $vendor;
@@ -63,30 +63,23 @@ class AuthController extends Controller
     }
 
     public function register(Request $request){
+        $errors = [];
+
         $validator = Validator::make($request->all(), [
             'email'     => 'required|email',
             'name'      => 'required|string',
             'last_name' => 'required|string',
-            'name'      => 'required|string',
-            'password'  => 'required|min:6',
+            'password'  => 'required|min:6|string',
+            'password_confirm' => 'required|min:6|string'
         ]);
-
-        if($validator->fails()){
-            return response()->json([
-                "status" => false,
-                "error" => $validator->errors()
-                ]);
-        }
-
-        $user = User::where('email', $request->email)->first();
-
-        if($user){
-            return response()->json([
-                'status' => false,
-                'error' => ['email' => 'Email déjà enregistrer']
-            ]);
-        }
         
+        // Si des champs sont manquant alors on stock le validator fails dans errors sinn retourne un tableau vide 
+        $errors +=  ($validator->fails()) ? [$validator->errors()] : [];
+        $user = User::where('email', $request->email)->first();
+        $errors += ($user) ? ["error" => "Email déjà enregistrer"] : []; // Si un l'email est déjà enregistrer
+        $errors += ($request->password !== $request->password_confirm) ? ["Les mots de passe ne correspondent pas ! "] : [];
+        (sizeof($errors) != 0) ? abort(response()->json(["statu" => false, "errors" => $errors])) : null;
+
         $user = User::create(array_merge(
             $validator->validated(),
             [

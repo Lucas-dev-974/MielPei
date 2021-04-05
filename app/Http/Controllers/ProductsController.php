@@ -23,30 +23,28 @@ class ProductsController extends Controller
             'price' => 'required|numeric',
             'details' => 'required|string',
             'quantity' => 'required|integer',
-            'name'     => 'required|string'
+            'name'     => 'required|string',
+            'img_path' => 'nullable[string'
         ]);
+        
+        ($validator->fails()) ?
+        abort(response()->json(['success' => false, 'error'   => $validator->errors()])) : false;
+            
+        ($user->role === 'user') ? 
+        abort(response()->json(['success' => false, 'error'   => 'vous devez être vendeur pour ajouter un produit !'])) : false;
+        
+        // Si aucune image renseigner 
+        $request->img_path = (!$request->img_pathz) ? $request->img_path : "/images/products/default.jpg"; 
 
-        if($validator->fails()){
-            return response()->json([
-                'success' => false,
-                'error'   => $validator->errors()
-            ]);
-        }
-        
-        if($user->role === 'user'){
-            return response()->json([
-                'success' => false,
-                'error'   => 'vous devez être vendeur pour ajouter un produit !'
-            ]);
-        }
         $user = $this->userIsVendor($user);   
-        $product = new Products();
-        
+        $product = Products::create(array_merge($validator->validated(), ["vendor_id" => $user->vendor->id]));
+        return $product;
         $product->vendor_id = $user->vendor->id;
         $product->price = $request->price;
         $product->name  = $request->name;
         $product->details = $request->details;
         $product->quantity = $request->quantity;
+        
 
         $product->save();
         return \response()->json(['success' => true, 'product' => $product]);
@@ -213,11 +211,7 @@ class ProductsController extends Controller
     public function getBestProductsSold(){
         $products = Products::orderBy('total_sold', 'desc')->get();
 
-        foreach($products as $product){
-            if($product->url_img === null){
-                $product->url_img = '/images/products/default.jpg';
-            }
-        }
+       
         return response()->json(['success' => true, 'products' => $products]);
     }
 
