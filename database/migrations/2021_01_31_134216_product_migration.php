@@ -20,8 +20,8 @@ class ProductMigration extends Migration
             $table->string('details');
             $table->integer('quantity');
             $table->string('name');
-            $table->integer('category')->nullable();
             $table->string('url_img')->nullable();
+            $table->integer('total_sold')->default(0);
             $table->timestamps();
         });
     }
