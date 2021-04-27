@@ -25,6 +25,7 @@ export default{
     },
     
     mounted(){
+        // console.log(this.$store.state.token);
         this.user = (localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : null
         if(localStorage.getItem('defaultPages')) this.pages = localStorage.getItem('defaultPages')
         this.getBestProduct()

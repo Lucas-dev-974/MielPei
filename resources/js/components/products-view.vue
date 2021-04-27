@@ -1,10 +1,10 @@
-<template>
-    <v-card class="mx-auto p-0 my-10" width="auto" max-width="400" >
-        <div class="bg-success text-white text-center" v-if="added" >
-            <small>Produit ajouter au panier</small>
+<template class="p-0">
+    <v-card class="mx-auto" width="auto" max-width="400" >
+        <div :class="'bg-' + msg_color + ' text-white text-center'" v-if="added" >
+            <small>{{notif_msg}}</small>
         </div>
 
-        <v-img height="auto" width="100%" :src="product.url_img" ></v-img>
+        <v-img height="auto" width="100%" class="pt-1" :src="product.url_img" ></v-img>
 
         <v-container grid-list-xs>
             <p class="fs-6 mb-0"> {{ product.name }} - {{product.price}} €</p>

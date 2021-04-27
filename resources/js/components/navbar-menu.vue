@@ -1,7 +1,7 @@
 <template>
     <v-card color="grey lighten-4" flat height="auto" tile>
     <v-toolbar dense>
-        <v-toolbar-title class=" col-1 fs-4">MielPeï</v-toolbar-title>
+        <v-toolbar-title class=" col-1 fs-4">Miel-Pay</v-toolbar-title>
 
         <v-tabs class="" center-active>
             <v-tab @click="$emit('setDefaultPages', 'home')">Acceuil</v-tab>

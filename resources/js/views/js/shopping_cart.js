@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import { toInteger } from 'lodash'
 import DetailsProduct from '../../components/product-details.vue'
 
 export default{
@@ -43,16 +44,21 @@ export default{
             .then(({data}) => {
                 console.log(data);
                 if(data.success){
-                    
-                    let shopping_cart = this.panier.findIndex((obj => obj.id == id))
+
+                    let  shopping_cart = this.panier.findIndex((obj => obj.id == id))
+
+                    // Formatage des données de String à Number 
+                    this.panier[shopping_cart].final_price   = parseFloat(this.panier[shopping_cart].final_price) 
+                    this.panier[shopping_cart].product.price = parseFloat(this.panier[shopping_cart].product.price) 
+
                     switch(option){
                         case "+": 
-                            this.panier[shopping_cart].quantity += 1 // Augmente la quantité choisi pour ce produit dans le panier
-                            this.panier[shopping_cart].final_price  = parseFloat(this.panier[shopping_cart].product.price) + parseFloat(this.panier[shopping_cart].final_price)  
+                            this.panier[shopping_cart].quantity     += 1 
+                            this.panier[shopping_cart].final_price  += this.panier[shopping_cart].product.price 
                             break
                         case "-":
-                            this.panier[shopping_cart].quantity -= 1
-                            this.panier[shopping_cart].final_price  = parseFloat(this.panier[shopping_cart].product.price) - parseFloat(this.panier[shopping_cart].final_price)  
+                            this.panier[shopping_cart].quantity     -= 1
+                            this.panier[shopping_cart].final_price  -= this.panier[shopping_cart].product.price
                             break
                     }
                 }   

@@ -6,12 +6,12 @@
       </v-btn>
     </template>
 
-    <v-card class="">
+    <v-card>
       <v-img :src="reservation.product.url_img" ></v-img>
       <v-container grid-list-xs>
         <p class="fs-6 mb-0">{{ reservation.product.name}} - {{ reservation.final_price}} €</p>
         <small ><p>Prix du produit: {{reservation.product.price}} </p> </small>
-        <small><p>Producteur: {{reservation.vendor.userz.name}}</p></small>
+        <small><p>Producteur: {{reservation.vendor.user.name}}</p></small>
       </v-container>
     </v-card>
   </v-dialog>

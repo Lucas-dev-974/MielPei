@@ -8,13 +8,16 @@ export default{
     data() {
         return {
             added: false,
-            quantity_to_add: 1
+            quantity_to_add: 1,
+            notif_msg: "",
+            msg_color: ""
         }
     },
     
     methods: {
-    reserve () {
+    reserve (msg) {
         this.added = true
+        this.notif_msg = msg
         setTimeout(() => (this.added = false), 2000)
     },
 
@@ -28,7 +31,14 @@ export default{
         }).then(({data}) => {
             console.log(data);
             if(data.success){
-                this.reserve()
+                this.msg_color = "success"
+                this.reserve("Produit ajouté au panier")
+
+            }else{
+                if(!data.success && data.error === "unauthorized"){
+                    this.msg_color = "danger"
+                    this.reserve("Veuillez vous connectez !")
+                }
             }
         })
     }

@@ -2,9 +2,6 @@ import Axios from "axios"
 import { unset } from "lodash"
 
 export default{
-    props: {
-    },
-    
     data() {
         return {
             user_roles: '',
@@ -15,14 +12,9 @@ export default{
     mounted() {
         console.log('navbar mounted');
         this.isConnected()
-        this.init()
     },
 
     methods: {
-        init: function(){
-            this.isConnected = (this.isConnect) ? true : false; 
-        },
-
         isConnected: function(){
             if(localStorage.getItem('token') && localStorage.getItem('user')){
                 Axios.get('/api/auth/validToken')

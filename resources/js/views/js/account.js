@@ -22,8 +22,6 @@ export default{
     },
 
     mounted() {
-        console.log("panier");
-        console.log(this.panier);
     },
 
     methods: {

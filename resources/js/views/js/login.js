@@ -3,19 +3,15 @@ import Axios from 'axios'
 export default{
     data() {
         return {
-            email: '',
-            password: '',
-            alert: false,
-            alert_msg: ''
+            email: '',     password: '',
+            alert: false, alert_msg: ''
         }
     },
 
     mounted() 
     {
         Axios.get('/api/auth/validToken').then(({data}) => {
-            if(data.success){
-                location.href = '/'
-            }
+            if(data.success) location.href = '/'
         })
     },
 
@@ -25,7 +21,7 @@ export default{
                 email: this.email,
                 password: this.password
             }).then(({data}) => {
-                console.log(data);
+                // On sauvegarde le token et les infos utilisateur
                 localStorage.setItem('token', data.token.original.access_token)
                 localStorage.setItem('user', JSON.stringify(data.user))
                 location.href = '/'

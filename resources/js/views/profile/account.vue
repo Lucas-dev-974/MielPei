@@ -1,6 +1,5 @@
 <template>
     <v-container>
-
         <div class="d-flex" v-if="profile">
             <div class="">
                 <v-avatar size="128">
@@ -10,10 +9,11 @@
             </div>
 
             <div class="col ml-5 ">  
-                <p style="margin-left: -18px;">email : {{user.email}} </p>
-                <p>role  : {{user.role}}</p>
-                <p style="margin-left: -18px;"> phone  : {{user.phone}}</p>
+                <p style="margin-left: -18px;" class="font-weight-bold">Email : {{user.email}} </p>
+                <p class="font-weight-bold">Adresse : {{user.address}}</p>
+                <p style="margin-left: -18px;" class="font-weight-bold"> Phone  : {{user.phone}}</p>
             </div>
+
         </div>
 
         <div v-if="user.role === 'user'">
