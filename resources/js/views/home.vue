@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <NavBar @setDefaultPages="setDefaultPages" :isConnect="isConnect"/>
+    <NavBar @setDefaultPages="setDefaultPages" />
     <v-container v-if="pages === 'home'" >
       <v-row style="height: 450px"  >
           <h3 class="text-center my-2">Découvrez les points de vente de nos agriculteurs</h3>  

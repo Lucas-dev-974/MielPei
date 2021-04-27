@@ -10,6 +10,9 @@ class ShoppingCard extends Model
     use HasFactory;
 
     protected $fillable = [
+        'vendor',
+        'client_id',
+        'product',
         'quantity',
         'is_buyed',
         'final_price',

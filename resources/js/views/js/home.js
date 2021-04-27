@@ -12,56 +12,25 @@ import ProductView from '../../components/products-view.vue'
  
 export default{
     components:{
-        ProducerProduct,
-        Account,
-
-        NavBar,
-        Map,
-        ProductView,
+        ProducerProduct, Account,
+        NavBar, Map, ProductView,
     },
 
     data() {
         return {
             pages: 'home',
             user: [],
-            isConnect: false,
-            defaultPage: {},
             products: [],
-            panier: []
         }
     },
-
-    mounted() {
-        this.isConnected();
-        let defaultPages = localStorage.getItem('defaultPages')
-        if(defaultPages){
-            this.pages = defaultPages
-        }
+    
+    mounted(){
+        this.user = (localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : null
+        if(localStorage.getItem('defaultPages')) this.pages = localStorage.getItem('defaultPages')
         this.getBestProduct()
-        console.log('home mounted');
     },
 
     methods: {
-        isConnected: function(){
-            Axios.get('/api/auth/validToken')
-            .then(({data}) => {
-                if(!data.success){ // Si le token n'est plus valide
-                    this.isConnect = false
-                    localStorage.setItem('defaultPages', 'home')
-                }
-                if(data.success){
-                    this.isConnect = true
-                    this.user = data.user
-                }
-            })
-        },
-
-        logout: function(){
-            this.isConnect = false
-            localStorage.clear()
-            Axios.post('/api/auth/logout')
-        },
-
         setDefaultPages: function(page){
             this.pages = page
             localStorage.setItem('defaultPages', this.pages)

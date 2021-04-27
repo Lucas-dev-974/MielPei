@@ -1,41 +1,20 @@
 <template>
-    <div class="text-center">
-    <v-dialog v-model="modal" width="500">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn  outlined x-small v-bind="attrs" v-on="on">
-          <small>détails</small>
-        </v-btn>
-      </template>
+  <v-dialog v-model="modal" min-width="200" max-width="350">
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn  outlined x-small v-bind="attrs" v-on="on">
+        <small>détails</small>
+      </v-btn>
+    </template>
 
-      <v-card class="">
-        <v-card-title class="headline grey lighten-2">
-          Détails du produit {{ reservation.product_id.name }}
-        </v-card-title>
-        <div class="d-flex">
-          <div class="col-4">
-            <v-img :src="reservation.product_id.img_url" ></v-img>
-            
-          </div>
-          <div class="col p-0 pt-2 pl-2">
-            <div>
-              <p class="fs-6">
-                {{ reservation.product_id.details }}
-              </p>
-
-              <div style="bottom: 0; position: absolute;" class="d-flex">
-                <small>
-                  <p class="m-0 "> Producteurs : {{ reservation.vendor_id.name + " " + reservation.vendor_id.last_name}} </p>
-                </small> 
-                <v-btn x-small color="success">Payer le produit</v-btn>
-                
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </v-card>
-    </v-dialog>
-  </div>
+    <v-card class="">
+      <v-img :src="reservation.product.url_img" ></v-img>
+      <v-container grid-list-xs>
+        <p class="fs-6 mb-0">{{ reservation.product.name}} - {{ reservation.final_price}} €</p>
+        <small ><p>Prix du produit: {{reservation.product.price}} </p> </small>
+        <small><p>Producteur: {{reservation.vendor.userz.name}}</p></small>
+      </v-container>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script src="./js/product-details.js"></script>

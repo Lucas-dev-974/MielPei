@@ -6,10 +6,10 @@
         <v-tabs class="" center-active>
             <v-tab @click="$emit('setDefaultPages', 'home')">Acceuil</v-tab>
             <v-tab @click="$emit('setDefaultPages', 'producer_product')">Produits producteurs</v-tab>
-            <v-tab v-if="isConnect" @click="$emit('setDefaultPages', 'account')">Mon compte</v-tab>
+            <v-tab v-if="Connected" @click="$emit('setDefaultPages', 'account')">Mon compte</v-tab>
         </v-tabs>
         
-        <div v-if='!isConnected' class="col-2 text-end">
+        <div v-if='!Connected' class="col-2 text-end">
             <a href="/login" class="fs-6 text-decoration-none mt-1">Se connecter</a> 
         </div>
         <div v-else>

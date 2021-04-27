@@ -16,7 +16,7 @@ class CommandsMigration extends Migration
         Schema::create('commands', function (Blueprint $table) {
             $table->id();
             $table->integer('shopping_card_id')->unsigned();
-            $table->integer('client_id')->unsigned();
+            $table->integer('client')->unsigned();
             $table->date('commanded_date');
             $table->string('delivery_address');
             $table->decimal('totalPrice');

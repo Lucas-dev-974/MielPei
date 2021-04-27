@@ -26,9 +26,9 @@
                             <td>{{ product.name }}</td>
                             <td>{{ product.price }}</td>
                             <td>  
-                                <v-icon x-small @click="increaseQuantity('-:1', product.id)">mdi-minus</v-icon>
+                                <v-icon x-small @click="increase_decrease_Quantity('-:1', product.id)">mdi-minus</v-icon>
                                 {{ product.quantity }} 
-                                <v-icon x-small @click="increaseQuantity('+:1', product.id)">mdi-plus</v-icon>
+                                <v-icon x-small @click="increase_decrease_Quantity('+:1', product.id)">mdi-plus</v-icon>
                             </td>
                             <td class="d-flex pr-4">
                                 <UpdateProduct :product="product"  @getVendorProducts='get_Products'/> 

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Products;
 use App\Models\ShoppingCard;
+use App\Models\VendorDetails;
 use App\Models\Vendors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,52 +13,33 @@ use Illuminate\Support\Facades\Validator;
 
 class ShoppingCardController extends Controller
 {
+    public function __construct(){
+        $this->user = $this->isConnected();
+    }
     
     public function getBuyedCard(){
-        $user = $this->isConnected();
-        if($user === false){
-            return response()->json([
-                'error' => 'veuillez vous connecter'
-            ]) ;
-        }
-        
-        $cards = DB::table('shopping_card')->where('client_id', $user->id)->where('isBuyed', true)->get();
+        $cards = ShoppingCard::where('client_id', $this->user->id)->where('isBuyyed', true)->get();
         foreach($cards as $card){
-            $card->product_id = Products::find($card->product_id)->first();
-            // $card->vendor_id  = User::find($card->vendor_id)->first();
+            $card->product = Products::find($card->product_id)->first();
+            $card->vendor  = User::find($card->vendor)->first();
         }
         return response()->json(['success' => true, 'cards' => $cards]);
     }
     
     // Récupère la liste des produits qui son dans le panier (produit non acheter)
     public function getNonBuyedCard(){
-        $user = $this->isConnected();
-        if($user === false){
-            return response()->json([
-                'error' => 'veuillez vous connecter'
-            ]) ;
+        $cards = ShoppingCard::where('client_id', $this->user->id)->where('isBuyed', false)->get(); 
+        foreach($cards as $card ){ 
+            $product = Products::find($card->product)->select(['price', 'details', 'name', 'url_img'])->first();
+            $vendor  = VendorDetails::find($card->vendor)->select(['shop_name', 'user_id', 'profile_img_url'])->first();
+            $vendor->user = User::find($vendor->user_id)->select(['name', 'last_name', 'email', 'phone'])->first();
+            $card->vendor = $vendor;
+            $card->product = $product;
         }
-
-        $cards = ShoppingCard::where('client_id', $user->id)
-                             ->where('isBuyed', false)->get(); 
-        
-        if(strlen($cards) > 0){
-            foreach($cards as $card){
-                $card->product_id = Products::find($card->product_id);
-                $card->product_id->img_url = ($card->product_id->img_url == null) ? "/images/products/default.jpg" : $card->product_id->img_url ;
-            }
-        }
-
         return response()->json(['success' => true, 'cards' => $cards]);
     }
 
     public function removeToCard(Request $request){
-        $user = $this->isConnected();
-        if($user === false){
-            return response()->json([
-                'error' => 'veuillez vous connecter'
-            ]) ;
-        }
         $validator = Validator::make($request->all(), [
             'card_id' => 'required|integer',
         ]);
@@ -81,17 +64,9 @@ class ShoppingCardController extends Controller
     }
 
     public function add(Request $request){
-        $user = $this->isConnected();
-        if($user === false){
-            return response()->json([
-                'error' => 'veuillez vous connecter'
-            ]) ;
-        }
         $validator = Validator::make($request->all(), [
-            'vendor_id' => 'required|integer',
-            'quantity'    => 'required|integer',
+            'quantity'   => 'required|integer',
             'product_id' => 'required|integer',
-            'price' =>'required|numeric',
 
         ]);
 
@@ -102,33 +77,64 @@ class ShoppingCardController extends Controller
             ]);
         }
 
-        if(!$this->productExist($request->product_id)){
+        $product = $this->productExist($request->product_id);
+        if(!$product){
             return response()->json([
                 'success' => false,
                 'error'   => 'Le produit renseigner n\'existe pas !'
             ]);
         }
 
-        $card = new ShoppingCard();
-        $card->vendor_id = $request->vendor_id;
-        $card->client_id = $user->id;
-        $card->product_id = $request->product_id;
-        $card->quantity   = $request->quantity;
-        $card->final_price = $request->quantity * $request->price;
-        $card->isBuyed     = false;
-        $card->save();
-        // DB::table('shopping_card')->insert([
-        //     'vendor_id' => $request->vendor_id,
-        //     'clients_id' => $user->id,
-        //     'product_id' => $request->product_id,
-        //     'quantity'   => $request->quantity,
-        //     'final_price' => $request->quantity * $request->price,
-        //     'isBuyed'   => false,
-        // ]);
+        $shoppingCardProduct = ShoppingCard::where(['product' => $request->product_id, 'client_id' => $this->user->id])->first();
+        if($shoppingCardProduct){
+            $shoppingCardProduct->quantity += $request->quantity;
+            $shoppingCardProduct->final_price += $product->price;
+            $shoppingCardProduct->save();
+        }else{
+            $card = new ShoppingCard();
+                $card->vendor    = $product->vendor;
+                $card->client_id = $this->user->id;
+                $card->product   = $request->product_id;
+                $card->quantity  = $request->quantity;
+                $card->final_price = $request->quantity * $product->price;
+                $card->isBuyed     = false;
+            $card->save();
+        }
+
         return response()->json([
             'success' => true,
         ]);
     }
 
+    public function updateQuantity(Request $request){
+        $validator = Validator::make($request->all(), [
+            'options' => 'required|string',
+            'shopping_card_id' => 'required|integer'
+        ]);
+            
+        ($validator->fails()) ? abort(response()->json(['success' => false, 'error' => $validator->errors()])) : false;
+        
+        $shoppingCard = ShoppingCard::where(['client_id' => $this->user->id, 'id' => $request->shopping_card_id])->first(); // Get the shopping card datas
 
+        $product      = Products::find($shoppingCard->product)->select("price")->first();        
+        switch($request->options){
+            case '+':
+                $shoppingCard->quantity += 1;
+                $shoppingCard->final_price += $product->price;
+                $success = $shoppingCard->save();
+                return $success ? response()->json(['success' => true])  : response()->json(['success' => false]);
+            case '-':
+                if($shoppingCard->quantity <= 1){ 
+                    return response()->json(['success' => false, 'error' => 'Veuillez suprimer ce produit du panier, impossible de diminuer la quantité en dessous de 1']); 
+                } 
+                $shoppingCard->quantity -= 1;
+                $shoppingCard->final_price -= $product->price;
+                $success = $shoppingCard->save();
+                return $success ? response()->json(['success' => true])  : response()->json(['success' => false]);
+        }
+    }
+
+    public function buy(Request $req){
+
+    }
 }

@@ -7,27 +7,26 @@ export default{
 
     data() {
         return {
-            loading: false,
-            selection: 1,
+            added: false,
+            quantity_to_add: 1
         }
     },
-
-    mounted() {
-    },
-
+    
     methods: {
     reserve () {
-        this.loading = true
-        setTimeout(() => (this.loading = false), 1500)
+        this.added = true
+        setTimeout(() => (this.added = false), 2000)
     },
 
     addToShoppingCard(){
         Axios.post('/api/shopping-card/add', {
-            vendor_id: this.product.vendor_id,
-            quantity: this.selection,
+            vendor: this.product.vendor.id,
+            quantity: this.quantity_to_add,
             product_id: this.product.id,
-            price: this.product.price
+            price: this.product.price,
+            img: this.img
         }).then(({data}) => {
+            console.log(data);
             if(data.success){
                 this.reserve()
             }

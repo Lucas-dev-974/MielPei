@@ -6,10 +6,14 @@ use App\Models\Products;
 use App\Models\User;
 use App\Models\VendorDetails;
 use App\Models\Vendors;
+use DateTime;
+use Hamcrest\Core\HasToString;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
@@ -18,50 +22,44 @@ class ProductsController extends Controller
     }
 
     public function add(Request $request){
-        $user = $this->isConnected();
         $validator = Validator::make($request->all(), [
             'price' => 'required|numeric',
             'details' => 'required|string',
             'quantity' => 'required|integer',
             'name'     => 'required|string',
-            'img_path' => 'nullable[string'
+            'img'      => 'required|image'
         ]);
         
-        ($validator->fails()) ?
+        ($validator->fails()) ?     // Si une valeur entrante est manquante retourne une erreur
         abort(response()->json(['success' => false, 'error'   => $validator->errors()])) : false;
             
-        ($user->role === 'user') ? 
+        ($this->user->role === 'user') ?  // Si l'utilisateur n'est pas vendeur alors return une erreur
         abort(response()->json(['success' => false, 'error'   => 'vous devez être vendeur pour ajouter un produit !'])) : false;
         
-        // Si aucune image renseigner 
-        $request->img_path = (!$request->img_pathz) ? $request->img_path : "/images/products/default.jpg"; 
-
-        $user = $this->userIsVendor($user);   
-        $product = Products::create(array_merge($validator->validated(), ["vendor_id" => $user->vendor->id]));
-        return $product;
-        $product->vendor_id = $user->vendor->id;
-        $product->price = $request->price;
-        $product->name  = $request->name;
-        $product->details = $request->details;
-        $product->quantity = $request->quantity;
         
+        // Define image name and upload it in storage server with the name created
+        $current_datime = date("Y.m.d-h.i");
+        $img_name = "{$this->user->id}-{$current_datime}"  . '.' . $request->img->extension();
+        $request->img->move(public_path('images/products'), $img_name);
 
+        $product = new Products();
+            $product->vendor = $this->user->vendor->id;
+            $product->price = $request->price;
+            $product->name  = $request->name;
+            $product->details = $request->details;
+            $product->quantity = $request->quantity;
+            $product->url_img  = 'images/products/' . $img_name;
         $product->save();
-        return \response()->json(['success' => true, 'product' => $product]);
+
+        return response()->json(['success' => true, 'product' => $product]);
     }
 
     public function update(Request $request){
-        $user = $this->isConnected();
-        if($user === false){
-            return response()->json([
-                'error' => 'veuillez vous connecter'
-            ]) ;
-        }
         $validator = Validator::make($request->all(), [
             'row_name' => 'required|string',
             'value'    => 'required',
             'product_id' => 'required|integer'
-        ]);
+        ]);    
 
         if($validator->fails()){
             return new JsonResponse([
@@ -70,11 +68,11 @@ class ProductsController extends Controller
             ]);
         }
 
-        $vendor = $this->userIsVendor($user)->vendor;
+        $vendor = $this->userIsVendor($this->user)->vendor;
 
         $product = Products::where(['id' => $request->product_id])->first();
 
-        if($product->vendor_id !== $vendor->id){
+        if($product->vendor !== $vendor->id){
             return new JsonResponse([
                 'success' => false,
                 'error'   => 'Vous n\'ête pas le vendeur de cet article !'
@@ -158,12 +156,6 @@ class ProductsController extends Controller
     }
 
     public function delete(Request $request){
-        $user = $this->isConnected();
-        if($user === false){
-            return response()->json([
-                'error' => 'veuillez vous connecter'
-            ]) ;
-        }
         $validator = Validator::make($request->all(), [
             'product_id' => 'required|integer',
         ]);
@@ -175,10 +167,10 @@ class ProductsController extends Controller
             ]);
         }
 
-        $vendor  = $this->userIsVendor($user)->vendor;
+        $vendor  = $this->userIsVendor($this->user)->vendor;
         $product = Products::where(['id' => $request->product_id])->first();
 
-        if($product->vendor_id !== $vendor->id){
+        if($product->vendor !== $vendor->id){
             return new JsonResponse([
                 'success' => false,
                 'error'   => 'Vous n\'ête pas le vendeur de cet article !'
@@ -204,21 +196,29 @@ class ProductsController extends Controller
         }
 
         $products = Products::get();
-        // $products = DB::table('products')->get();
+        $products = $this->get_SimpleProductVendorInformation($products);
         return $products;
     }
 
     public function getBestProductsSold(){
         $products = Products::orderBy('total_sold', 'desc')->get();
-
-       
+        $products = $this->get_SimpleProductVendorInformation($products); 
         return response()->json(['success' => true, 'products' => $products]);
     }
 
     public function getVendorProducts(Request $request){
-        $user = $this->isConnected();
-        $user = $this->userIsVendor($user);
-        $products = Products::where('vendor_id', $user->vendor->id)->get();
+        $user = $this->userIsVendor($this->user);
+        $products = Products::where('vendor', $user->vendor->id)->get();
         return response()->json(['success' => true, 'products' => $products]);
+    }
+
+    private function get_SimpleProductVendorInformation($products){
+        foreach($products as $product){
+            $vendor =  VendorDetails::find($product->vendor)->select(['user_id', 'id', 'shop_name'])->first();
+            $user   = User::find($vendor->user_id)->select(['name', 'last_name', 'email'])->first();
+            $vendor->user = $user;
+            $product->vendor = $vendor;
+        }
+        return $products;
     }
 }

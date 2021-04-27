@@ -28,7 +28,7 @@ const router = new VueRouter({
         },
 
         {
-            path: '/admin/dashboard',
+            path: '/admin',
             name: 'dashboard',
             component: Dashboard,
         },

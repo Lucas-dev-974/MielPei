@@ -15,7 +15,7 @@
          <v-container class="">
           <v-text-field v-model="name" label="Nom du produit" class="px-3"  hide-details="auto"></v-text-field>
           <v-text-field v-model="details" label="Detailles du produit" class="px-3"  hide-details="auto"></v-text-field>
-          <v-file-input class="w-90" placeholder="Choisisez l'image de presentation de votre produit"></v-file-input>
+          <v-file-input v-model="image" class="w-90" placeholder="Choisisez l'image de presentation de votre produit"></v-file-input>
           <div class="d-flex justify-content-around">
               <v-text-field v-model="price" type="number"  label="Prix" class="px-3"  hide-details="auto"></v-text-field>
               <v-text-field v-model="quantity" type="number" label="Quantité" class="px-3"  hide-details="auto"></v-text-field>

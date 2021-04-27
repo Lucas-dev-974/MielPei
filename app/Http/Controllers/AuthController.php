@@ -45,7 +45,7 @@ class AuthController extends Controller
         
         $user = User::where('email', $request->email)->first();
 
-        if($user->role === "vendor"){ // Si l'utilisateur est un producteur
+        if($user->role === "vendor" || $user->role === "admin"){ // Si l'utilisateur est un producteur
             $vendor = VendorDetails::where('user_id', $user->id)->first();
             $user->vendor = $vendor;
         }
@@ -119,6 +119,10 @@ class AuthController extends Controller
                 'success' => false,
                 'error'   => 'votre token est invalide, veuillez vous connecté'
             ]);
+        }
+
+        if($user->role == "vendor" || $user->role == "admin"){
+            $user->vendor = VendorDetails::where('user_id', $user->id);
         }
 
         if($user->role === "vendor"){

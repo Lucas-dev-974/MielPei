@@ -16,8 +16,8 @@ class ShoppingCardMigration extends Migration
         Schema::create('shopping_cards', function (Blueprint $table) {
             $table->id();
             $table->integer('client_id')->unsigned();
-            $table->integer('vendor_id')->unsigned();
-            $table->integer('product_id')->unsigned();
+            $table->integer('vendor')->unsigned();
+            $table->integer('product')->unsigned();
             $table->integer('quantity');
             $table->boolean('isBuyed');
             $table->decimal('final_price');

@@ -14,18 +14,24 @@ export default{
             details: '',
             price: 0,
             quantity: 0,
+            image: null
         }
     },
 
     methods: {
         addProduct: function(){
-            Axios.post('/api/products/add', {
-                name: this.name,
-                details: this.details,
-                price: this.price,
-                quantity: this.quantity
-            })
-            .then(({data}) => {
+            let formData = new FormData()
+                formData.append('img', this.image)
+                formData.append('name', this.name)
+                formData.append('details', this.details)
+                formData.append('quantity', this.quantity)
+                formData.append('price', this.price)
+
+            Axios.post('/api/products/add', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(({data}) => {
                 if(data.success == false){  
                     Object.values(data.error).map(error => {
                         this.alert.msg += error + '\n'
@@ -38,6 +44,7 @@ export default{
                     this.$emit('getBestProduct')
                 }
             })
-        }
+        },
+
     },
 }

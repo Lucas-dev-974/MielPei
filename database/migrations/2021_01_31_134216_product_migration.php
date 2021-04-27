@@ -15,7 +15,7 @@ class ProductMigration extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->integer('vendor_id')->unsigned();
+            $table->integer('vendor')->unsigned();
             $table->decimal('price');
             $table->string('details');
             $table->integer('quantity');

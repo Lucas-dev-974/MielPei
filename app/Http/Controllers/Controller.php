@@ -18,11 +18,15 @@ use Illuminate\Support\Facades\Auth;
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function isConnected(){
-        try{ // Vérifie si il y a un token pour autoriser l'accées aux données
+        try{ // Vérifie si il y a un token en place pour autoriser l'accées aux données
             $user = Auth::userOrFail();
+            if($user->role === 'vendor'){   // Si l'user est un vendeur alors on retourne ses détails dans vendor
+                $user->vendor = VendorDetails::where("user_id", $user->id)->first();
+            }
             return $user;
         }catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e){
-            return false;
+            return false;   
+            // abort(response()->json(['success' => false, 'error' => 'veuillez vous connecter'])) ;
         }
     }
 
@@ -37,38 +41,21 @@ use Illuminate\Support\Facades\Auth;
 
     public function clientExist($client_id){
         $client = User::where('id', $client_id)->first();
-        if(!$client){
-            return false;
-        }
-        return $client;
+        return (!$client) ? false : $client;
     }
     
     public function productExist($product_id){
         $product = Products::where('id', $product_id)->first();
-        if(!$product){
-            return false;
-        }
-        return $product;
+        return (!$product) ?  false :  $product;
     }
 
     public function IsUserShoppingCard($shopping_card_id, $user_id){
         $card = ShoppingCard::where('id', $shopping_card_id)->get();
-        if($card->clients_id !== $user_id){
-            return false;
-        }
-        return $card;
+        return ($card->clients_id !== $user_id) ? false : $card;
     }
 
     public function IsAdmin($user_id){
         $user = User::where('id', $user_id)->get();
-        if(!$user){
-            return false;
-        }
-        if($user->role !== 'admin'){
-            return false;
-        }
-
-        return true;
-    }
-    
+        return ($user->role !== 'admin') ?  false :  true;
+    }    
 }

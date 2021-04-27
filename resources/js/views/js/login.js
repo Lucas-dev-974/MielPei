@@ -25,6 +25,7 @@ export default{
                 email: this.email,
                 password: this.password
             }).then(({data}) => {
+                console.log(data);
                 localStorage.setItem('token', data.token.original.access_token)
                 localStorage.setItem('user', JSON.stringify(data.user))
                 location.href = '/'

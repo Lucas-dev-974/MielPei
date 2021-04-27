@@ -7,17 +7,25 @@
                         <th class="text-left">
                             Produit
                         </th>
+                        <th>
+                            Quantité
+                        </th> 
                         <th class="text-left">
                             Prix
                         </th>
-                        <th></th> 
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody class="w-100">
                     <tr v-for="reservation in panier" :key="reservation.id" class="">
-                        <td>{{ reservation.product_id.name }}</td>
-                        <td>{{ reservation.product_id.price}} €</td>    
+                        <td>{{ reservation.product.name }}</td>
+                        <td>  
+                            <v-icon x-small @click="update_Quantity(reservation.id, '-')">mdi-minus</v-icon>
+                            {{ reservation.quantity }} 
+                            <v-icon x-small @click="update_Quantity(reservation.id, '+')">mdi-plus</v-icon>
+                        </td>
+                        <td>{{ reservation.final_price}} €</td>    
                         <td> <DetailsProduct :reservation="reservation" /> </td>
                         <td>     
                             <v-btn small icon color="">

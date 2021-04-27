@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Validator;
 
 class MediasController extends Controller
 {
+    public function __construct(){
+        $this->user = $this->isConnected();
+    }
+
     public function get_imagesByProductId(Request $request){
 
     }
@@ -22,14 +26,14 @@ class MediasController extends Controller
             'product_id' => 'required|integer'
         ]);
 
-        $user = $this->isCoénnected();
-        if(!$user){
+        
+        if(!$this->user){
             return response()->json([
                 'success' => false,
                 'error'   => 'Veuillez vous connecté !'
             ]);
         }
-        $user = $this->userIsVendor($user);
+        $user = $this->userIsVendor($this->user);
         if($user->role === 'user'){
             return response()->json([
                 'success' => false,
@@ -94,13 +98,7 @@ class MediasController extends Controller
     
 
     public function set_ProfileImageVendors(Request $request){
-        $user = $this->isConnected();
-        if(!$user){
-            return response()->json([
-                'success' => false,
-                'error'   => 'veuillez vous connecté !'
-            ]);
-        }if(!$this->vendorExist($user->id)){
+        if(!$this->vendorExist($this->user->id)){
             return response()->json([
                 'success' => false,
                 'error'   => 'vous devez être vendeur pour effectuer cet opération'
@@ -119,7 +117,7 @@ class MediasController extends Controller
 
         $imageName = time().'.'.$request->image->extension();  
         $request->image->move(public_path('images/vendors/profiles-medias'), $imageName);
-        $data = VendorDetails::where('client_id', $user->id)->update(['profile_img_url' => '/images/vendors/profiles-medias/' . $imageName]);
+        $data = VendorDetails::where('client_id', $this->user->id)->update(['profile_img_url' => '/images/vendors/profiles-medias/' . $imageName]);
         if(!$data){
             return response()->json([
                 'success' => false,
