@@ -5,10 +5,6 @@ export default{
         ProductView
     },
 
-    props: {
-        user: { required: true }
-    },
-
     data() {
         return {
             products: []

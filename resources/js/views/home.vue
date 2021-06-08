@@ -1,28 +1,28 @@
 <template>
-  <div class="">
-    <NavBar @setDefaultPages="setDefaultPages" />
-    <v-container v-if="pages === 'home'" >
+  <div>
+    <NavBar  />
+    <v-container v-if="$store.state.page === 'home'" >
       <v-row style="height: 450px"  >
-          <h3 class="text-right my-2">Découvrez les points de vente de nos agriculteurs</h3>  
+          <h3 class="text-left my-2 fp-nunito">Points de vente de nos agriculteurs</h3>  
           <Map />
       </v-row>
 
       <v-row>
-        <p class="fs-3 mt-10 text-left">Retrouvez les meilleurs produits vendue</p>
-        <template v-for="product in products" >
+        <p class="fs-3 mt-10 text-center fp-nunito">Retrouvez les meilleurs produits vendues</p>
+        <template v-for="product in $store.state.best_products" >
             <v-col  :key="product.id"> 
-              <ProductView :product='product' :user='user'/>
+              <ProductView :product='product' />
             </v-col>
         </template>
       </v-row>
     </v-container>    
 
-    <div v-if="pages === 'account'">
-       <Account :user='user'  @getBestProduct="getBestProduct" /> 
+    <div v-if="$store.state.page === 'account'">
+       <Account   @getBestProduct="getBestProduct" /> 
     </div>
 
-    <div v-if="pages === 'producer_product'">
-      <ProducerProduct :user="user"/>
+    <div v-if="$store.state.page === 'producer_product'">
+      <ProducerProduct />
     </div>
   </div>
 

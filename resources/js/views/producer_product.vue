@@ -1,5 +1,8 @@
 <template>
-     <v-container class="mt-5">
+     <v-container class="mt-10">
+        <div class="d-flex justify-center">
+            <h3>Les derniers produits</h3>
+        </div>
         <v-row>
             <template v-for="product in products">
                 <v-col :key="product.id"> 

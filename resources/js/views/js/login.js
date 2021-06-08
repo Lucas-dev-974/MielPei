@@ -22,12 +22,14 @@ export default{
                 password: this.password
             }).then(({data}) => {
                 // On sauvegarde le token et les infos utilisateur
-                localStorage.setItem('token', data.token.original.access_token)
-                localStorage.setItem('user', JSON.stringify(data.user))
+                console.log(data);
+                this.$store.commit('set_islogged', true)
+                this.$store.commit('set_user',     data.user)
+                this.$store.commit('set_token',    data.token.original.access_token)
                 location.href = '/'
             }).catch(error => {
-                this.alert = !this.alert
                 this.alert_msg = "Email ou mot de passe incorrect"
+                this.alert = !this.alert
             })
         }
     },

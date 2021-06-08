@@ -32,6 +32,6 @@ class ShoppingCardMigration extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shopping_card');
+        Schema::dropIfExists('shopping_cards');
     }
 }

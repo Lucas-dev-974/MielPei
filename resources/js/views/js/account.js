@@ -9,10 +9,6 @@ export default{
         VendorDash, Commands, ShoppingCart, BecomeVendor
     },
 
-    props:{
-        user:   { required: true }
-    },
-
     data() {
         return {
             page: "panier",
@@ -22,6 +18,7 @@ export default{
     },
 
     mounted() {
+        console.log(this.$store.state.userinfos);
     },
 
     methods: {

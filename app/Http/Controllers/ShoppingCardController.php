@@ -10,6 +10,7 @@ use App\Models\Vendors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class ShoppingCardController extends Controller
 {
@@ -135,6 +136,11 @@ class ShoppingCardController extends Controller
     }
 
     public function buy(Request $req){
+        $validator = Validator::make($req->all(), ['shoppingCardID']);
+        if($validator->fails()) return response()->json(["success" => false, "error" => $validator->fails()]);
+
+        $shoppingCard = ShoppingCard::find($req->shoppingCardID)->get();
+        // $shoppingCard->isBuye
 
     }
 }

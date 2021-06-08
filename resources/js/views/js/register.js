@@ -1,9 +1,16 @@
 import Axios from "axios";
+import Alert from "../../services/alert.vue"
+
 export default{
+    components: {
+        Alert
+    },
+
     data() {
         return {
-            alert: false,
+            alert_state: false,
             alert_msg: '',
+            alert_type: '',
             name: '',
             last_name: '',
             phone: '',
@@ -24,7 +31,7 @@ export default{
 
     methods: {
         register: function(){
-            this.alert_msg = ''
+            console.log(this.$store.state.user);
             Axios.post('/api/auth/register', {
                 name: this.name,
                 last_name: this.last_name,
@@ -36,20 +43,14 @@ export default{
             .then(({data}) => {
                 console.log(data);
                 if(!data.success){
-                    this.alert = true
-                    if(data.error.name){
-                        this.alert_msg += data.error.name
-                    }if(data.error.last_name){
-                        this.alert_msg += data.error.last_name
-                    }if(data.error.email){
-                        this.alert_msg += data.error.email
-                    }
+                    this.alert_state = true
+                    this.alert_msg   = data.errors
+                    this.alert_type  = "error"
                 }else{
-                    Axios.defaults.headers.common = {'Authorization': `bearer ${data.token}`}        
-                    localStorage.setItem('token', data.token)
-                    localStorage.setItem('user', data.user)
-
-                    location.href = '/'
+                    Axios.defaults.headers.common = {'Authorization': `bearer ${data.token}`}   
+                    this.$store.commit('set_user', data.user)
+                    console.log(this.$store.state.user);
+                    // location.href = '/'
                 }
             }).catch(error => {
                 console.log(error);

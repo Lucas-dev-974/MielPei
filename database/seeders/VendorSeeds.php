@@ -18,12 +18,14 @@ class VendorSeeds extends Seeder
             [
                 'client_id' => 1,
                 'cultur_coordinate' => json_encode(['coordinate' => ["x" => '15484848', "y" => '88484848']]),
-                'shop_name'     => 'Zot miel',
+                'shop_name'     => 'Le miel réunion',
+            ],
+            [
+                'client_id' => 2,
+                'cultur_coordinate' => json_encode(['coordinate' => ["x" => '15484848', "y" => '88484848']]),
+                'shop_name'     => 'honey shop 974 ',
             ]
         ];
-        // foreach(array(1,2,3,4) as $id){
-
-        // }
         DB::table('vendors')->insert($data);
     }
 }

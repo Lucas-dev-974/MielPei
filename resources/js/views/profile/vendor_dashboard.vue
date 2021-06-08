@@ -4,7 +4,7 @@
             <Alert id='test' :state='alert.state' :msg='alert.msg' :type='alert.type' /> 
         </div>
         <div class="d-flex justify-content-center" >
-            <p class="fs-6 border-bottom  text-center "> {{user.vendor.shop_name}} </p>
+            <p class="fs-6 border-bottom  text-center "> {{ $store.state.userinfos.vendor.shop_name }} </p>
         </div>
 
         <div class="d-flex justify-content-center">
@@ -22,13 +22,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="product in products" :key="product.id">
+                        <tr v-for="product in $store.state.vendor_products" :key="product.id">
                             <td>{{ product.name }}</td>
                             <td>{{ product.price }}</td>
                             <td>  
-                                <v-icon x-small @click="increase_decrease_Quantity('-:1', product.id)">mdi-minus</v-icon>
+                                <v-icon x-small @click="update_quantity('-:1', product.id)">mdi-minus</v-icon>
                                 {{ product.quantity }} 
-                                <v-icon x-small @click="increase_decrease_Quantity('+:1', product.id)">mdi-plus</v-icon>
+                                <v-icon x-small @click="update_quantity('+:1', product.id)">mdi-plus</v-icon>
                             </td>
                             <td class="d-flex pr-4">
                                 <UpdateProduct :product="product"  @getVendorProducts='get_Products'/> 

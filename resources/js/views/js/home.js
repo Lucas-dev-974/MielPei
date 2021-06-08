@@ -19,33 +19,39 @@ export default{
     data() {
         return {
             pages: 'home',
-            user: [],
-            products: [],
         }
     },
     
-    mounted(){
-        // console.log(this.$store.state.token);
-        this.user = (localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : null
+    mounted(){  
+        if(this.$store.state.token) Axios.defaults.headers.common = {'Authorization': `bearer ${this.$store.state.token}`}
         if(localStorage.getItem('defaultPages')) this.pages = localStorage.getItem('defaultPages')
         this.getBestProduct()
     },
 
     methods: {
-        setDefaultPages: function(page){
-            this.pages = page
-            localStorage.setItem('defaultPages', this.pages)
-        },
-
         getBestProduct(){
             this.products = []
             Axios.get('/api/products/get-best-products-sold').then(({data}) => {
                 if(data.success){
-                    this.products = data.products
+                    this.$store.commit('set_best_products', data.products)
+                    console.log(this.$store.state.best_products);
                 }
             })
         },
 
+        isConnected: function(){
+            if(this.$store.state.token !== null){
+                Axios.get('/api/auth/validToken')
+                .then(({data}) => {
+                    if(data.success){ // Si le token est valide
+                        this.$store.commit('set_islogged', true)  // Met la variable de store.state.is_logged a true
+                        this.$store.commit('set_user', data.user)  
+                    }else{           // Sinon si token non valide
+                        this.$store.commit('set_islogged', false)
+                    }
+                })
+            }
+        },
         
     },
 }

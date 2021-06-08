@@ -78,7 +78,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         $errors += ($user) ? ["error" => "Email déjà enregistrer"] : []; // Si un l'email est déjà enregistrer
         $errors += ($request->password !== $request->password_confirm) ? ["Les mots de passe ne correspondent pas ! "] : [];
-        (sizeof($errors) != 0) ? abort(response()->json(["statu" => false, "errors" => $errors])) : null;
+        (sizeof($errors) != 0) ? abort(response()->json(["success" => false, "errors" => $errors])) : null;
 
         $user = User::create(array_merge(
             $validator->validated(),

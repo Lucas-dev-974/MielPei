@@ -12,12 +12,6 @@ export default{
         DeleteProduct
     },
 
-    props:{
-        user: {
-            required: true
-        },
-    },
-
     data() {
         return {
             alert: {
@@ -25,39 +19,25 @@ export default{
                 msg:  '',
                 state: ''
             },
-            products: []
         }
     },
 
     mounted() {
         this.get_Products()
-        console.log(this.user);
     },
-
 
     methods: {
         get_Products: function(){
             this.products = []
             Axios.get('/api/products/get-my-products')
             .then(({data}) => {
-                this.products = data.products
+                this.$store.commit('set_vendor_products', data.products)
             })
         },
 
-        increaseQuantity: function(state, product_id){
-            Axios.post('/api/products/update', { row_name: 'quantity', value: state, product_id: product_id})
-            .then(({data}) => {
-                if(data.success){
-                    this.products.forEach(element => {
-                        let options = state.split(":")
-                        if(element.id === product_id && options[0] === '+'){
-                            element.quantity += 1
-                        }else if(element.id === product_id && options[0] === '-'){
-                            element.quantity -= 1
-                        }
-                    });
-                }
-            })
+        update_quantity: function(options, product_id){
+            let products_options = [ options, product_id ];
+            this.$store.commit('update_quantity_vp', products_options)
         },
     },
 }

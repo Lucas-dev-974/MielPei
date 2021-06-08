@@ -9,9 +9,11 @@
     <v-card>
       <v-img :src="reservation.product.url_img" ></v-img>
       <v-container grid-list-xs>
-        <p class="fs-6 mb-0">{{ reservation.product.name}} - {{ reservation.final_price}} €</p>
+        <p class="fs-6 mb-0">{{ reservation.product.name}} - {{ reservation.final_price}}€ x{{ reservation.quantity}}</p>
         <small ><p>Prix du produit: {{reservation.product.price}} </p> </small>
-        <small><p>Producteur: {{reservation.vendor.user.name}}</p></small>
+        <small><p>Producteur: {{reservation.vendor.user.name}} {{reservation.vendor.user.last_name}}</p></small>
+
+        <v-btn small block @click="buy_Product" color="success">Acheter</v-btn>
       </v-container>
     </v-card>
   </v-dialog>

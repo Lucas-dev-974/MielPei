@@ -15,17 +15,24 @@ class UserSeeds extends Seeder
      */
     public function run()
     {
-        $data = [
-            [
-                'name' => 'jason',
-                'last_name' => 'hoareau',
-                'email'     => 'jason.h@gmail.com',
-                'password'  => Hash::make('jason.H@'),
-                'phone'     => '06125496',
-                'role' => 'user',
-            ]
+        $users = [];
+        $users_data = [
+            'name' => ['lcs', 'marvin', 'chloe'],
+            'last_name' => ['lvn', 'dupont', 'mounien'],
+            'phone'     => ['06125496', '06125496', '06125496'],
+            'role' => ['admin', 'user', 'vendor'],
         ];
 
-        DB::table('users')->insert($data);
+        for($i = 0; $i < 3; $i++){
+            $user = [
+                'name' =>      $users_data['name'][$i],
+                'last_name' => $users_data['last_name'][$i],
+                'password'  => Hash::make($users_data['name'][$i] . $users_data['lastname'] .'@'),
+
+            ];
+
+            DB::table('users')->insert($user);
+        }
+        
     }
 }
