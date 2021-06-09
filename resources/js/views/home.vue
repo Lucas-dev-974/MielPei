@@ -11,7 +11,7 @@
         <p class="fs-3 mt-10 text-center fp-nunito">Retrouvez les meilleurs produits vendues</p>
         <template v-for="product in $store.state.best_products" >
             <v-col  :key="product.id"> 
-              <ProductView :product='product' />
+              <product='product' />
             </v-col>
         </template>
       </v-row>

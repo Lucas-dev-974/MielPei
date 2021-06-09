@@ -10,3 +10,4 @@
 
 # Make migration 
     php artisan migrate
+
